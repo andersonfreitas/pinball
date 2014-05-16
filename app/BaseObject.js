@@ -117,7 +117,7 @@ BaseObject.prototype.render = function() {
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 
-  if (ChessPlayer.properties.scene.wireframe) {
+  if (Pinball.properties.scene.wireframe) {
     gl.drawElements(gl.LINE_STRIP, this.indices.length, gl.UNSIGNED_SHORT, 0);
   } else {
     gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
