@@ -43,9 +43,9 @@
           var factor = 100 / this.canvas.height;
           var dy = factor * (y - this.lastY) * 0.01;
 
-          zoom = ChessPlayer.properties.scene.zoom + dy;
+          zoom = Pinball.properties.scene.zoom + dy;
 
-          ChessPlayer.properties.scene.zoom = Math.max(Math.min(zoom, 2), 0.2);
+          Pinball.properties.scene.zoom = Math.max(Math.min(zoom, 2), 0.2);
         }
         if (ev.which === 1 || ev.button === 0) {
           var factor = 100 / this.canvas.height;
