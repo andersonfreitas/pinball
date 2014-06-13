@@ -10,8 +10,6 @@
       this.mass;
       this.velocity = vec3.create();
       this.acceleration = vec3.create();
-      this.old = vec3.create();
-      this.timestep = 1;
     }
 
     RigidBody.prototype.applyForce = function(forceVector) {

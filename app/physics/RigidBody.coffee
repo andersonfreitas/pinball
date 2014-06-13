@@ -5,14 +5,11 @@ class RigidBody
 
     @velocity = vec3.create()
     @acceleration = vec3.create()
-    @old = vec3.create()
-    @timestep = 1
 
   applyForce: (forceVector) ->
     force = vec3.create()
     vec3.div(force, forceVector, vec3.fromValues(@mass, @mass, @mass))
     vec3.add(@acceleration, @acceleration, force)
-    # @acceleration = forceVector
 
   applyFriction: (coeff) ->
     friction = vec3.clone(@velocity)
@@ -25,12 +22,6 @@ class RigidBody
     vec3.add(@velocity, @velocity, @acceleration)
     vec3.add(@renderable.position, @renderable.position, @velocity)
     @acceleration = vec3.create()
-
-    # temp = vec3.clone(@renderable.position)
-    # b = vec3.sub(vec3.create(), @renderable.position, @old)
-    # c = vec3.scale(vec3.create(), @acceleration, @timestep * @timestep)
-    # vec3.add(@renderable.position, @renderable.position, vec3.add(vec3.create(), b, c))
-    # @old = temp
 
   checkForCollisions: ->
     boundary = 7
@@ -54,7 +45,6 @@ class RigidBody
     else if @renderable.position[2] > boundary
       @velocity[2] *= -1
       @renderable.position[2] = boundary
-
 
 # class ShapeSphere extends RigidBodyShape
 #   constructor: (@renderable, @mass, @radius) ->

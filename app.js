@@ -132,8 +132,8 @@ var Pinball = (function() {
       obj = sceneGraph[i];
 
       mvPushMatrix();
-      mat4.translate(mvMatrix, mvMatrix, obj.position);
       mat4.rotateY(mvMatrix, mvMatrix, obj.rotation[1]*π/180);
+      mat4.translate(mvMatrix, mvMatrix, obj.position);
       setMatrixUniforms();
 
       obj.render();
@@ -228,8 +228,8 @@ var Pinball = (function() {
 
   function onWindowResize(event) {
     var canvas = WebGL.getCanvas();
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = 640;//window.innerWidth;
+    canvas.height = 480;//window.innerHeight;
 
     gl.viewportWidth = canvas.width;
     gl.viewportHeight = canvas.height;
