@@ -33,7 +33,7 @@ var Pinball = (function() {
       shadows: false,
       wireframe: false,
       lightning: true,
-      zoom: 0.500,
+      zoom: 1,
       diffuseLight: '#ccc'
     }
   };
@@ -47,7 +47,7 @@ var Pinball = (function() {
       wireframe: folders.scene.add(properties.scene, 'wireframe'),
       lightning: folders.scene.add(properties.scene, 'lightning'),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
-      zoom: folders.scene.add(properties.scene, 'zoom', 0.2, 2).listen(),
+      zoom: folders.scene.add(properties.scene, 'zoom', 0.2, 8.0).listen(),
     }
   };
 
@@ -62,11 +62,17 @@ var Pinball = (function() {
 
   var sceneGraph = [];
 
+  var physicsWorld = [];
+
   function initScene() {
     function addToScene(object) { sceneGraph.push(object); return object; }
 
-    addToScene(new BoardCube());
-    addToScene(new Board());
+    var sphere = new Sphere(2).updatePosition(0,10,0);
+
+    addToScene(sphere);
+    addToScene(new ObjFile('plane'));
+
+    physicsWorld.push(new RigidBody(sphere, 1.0));
 
     return sceneGraph;
   }
@@ -92,7 +98,7 @@ var Pinball = (function() {
     var color = Utils.hexToRgb('#ccc');
     gl.uniform3f(currentProgram.u_DiffuseLight, color.r, color.g, color.b);
 
-    var lightDirection = vec3.fromValues(1, 1, 0);
+    var lightDirection = vec3.fromValues(5, 5, 5);
     vec3.normalize(lightDirection, lightDirection);
     gl.uniform3fv(currentProgram.u_LightDirection, _.flatten(lightDirection));
 
@@ -145,6 +151,7 @@ var Pinball = (function() {
     mat4.lookAt(mvMatrix, eye, at, up);
   }
 
+  var x = 0;
   function updateAnimationTime() {
     var timeNow = new Date().getTime();
     if (lastTime !== 0) {
@@ -152,6 +159,10 @@ var Pinball = (function() {
 
       for (var i = sceneGraph.length - 1; i >= 0; i--) {
         obj = sceneGraph[i];
+
+        if (i === 0) {
+          // obj.rotate(vec3.fromValues(1, x+=1, 1));
+        }
 
         obj.updateAnimation(elapsed);
       }
@@ -162,8 +173,23 @@ var Pinball = (function() {
   function animate() {
     requestAnimationFrame(animate);
     stats.begin();
-    render();
+
+    var gravity = vec3.fromValues(0, -0.1, 0);
+    var wind = vec3.fromValues(0.001, 0, 0.001);
+
+    for (var i = 0; i < physicsWorld.length; i++) {
+      obj = physicsWorld[i];
+      // obj.applyForce(wind);
+      obj.applyForce(gravity);
+      obj.applyFriction(0.01);
+      obj.update();
+
+      obj.checkForCollisions();
+    };
+
     updateAnimationTime();
+    render();
+
     stats.end();
   }
 
@@ -185,10 +211,12 @@ var Pinball = (function() {
     initScene();
     initShaderVars();
 
-    setupCameraPosition();
-    updateProjection();
+    updateLightning(true);
 
-    folders.scene.open();
+    setupCameraPosition();
+    // updateProjection();
+
+    // folders.scene.open();
 
     onWindowResize();
     window.addEventListener('resize', _.debounce(onWindowResize, 300, false), false);
@@ -213,7 +241,8 @@ var Pinball = (function() {
   return {
     init: init,
     initScene: initScene,
-    properties: properties
+    properties: properties,
+    sceneGraph: sceneGraph
   };
 })();
 

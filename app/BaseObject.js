@@ -21,6 +21,12 @@ function BaseObject() {
   this.animationTime = 0;
 }
 
+BaseObject.prototype.updatePosition = function(x, y, z) {
+  this.position = vec3.fromValues(x, y, z);
+  return this;
+}
+
+
 BaseObject.prototype.rotate = function(rotation) {
   this.rotation = rotation;
   return this;
@@ -105,6 +111,8 @@ BaseObject.prototype.loadModelFromObj = function(dados) {
 BaseObject.prototype.render = function() {
   if (this.vertexBuffer === 0)
     return;
+
+  // gl.depthMask(false);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
   gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);

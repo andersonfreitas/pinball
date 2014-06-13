@@ -1,7 +1,7 @@
 function Board() {
   BaseObject.call(this);
 
-  this.position = vec3.fromValues(-4, 0, -4);
+  this.position = vec3.fromValues(-0.5, 0, -0.5);
   this.createBoard();
   this.initBuffers();
 }
@@ -15,13 +15,7 @@ Board.prototype.createBoard = function() {
     color = (color !== a) ? a : b;
   }
 
-  for (var i = 0; i < 8; i++) {
-    cycleColors('white', 'black');
-    for (var j = 0; j < 8; j++) {
-      cycleColors('white', 'black');
-      this.createSquare(i, j, color);
-    }
-  }
+  this.createSquare(0, 0, 'black');
 };
 
 Board.prototype.createSquare = function(posX, posZ, color) {
@@ -38,7 +32,7 @@ Board.prototype.createSquare = function(posX, posZ, color) {
     l + 1, l + 3, l + 2
   );
 
-  squareColor = (color == 'black') ? vec4.fromValues(0, 0, 0, 1) : vec4.fromValues(1, 1, 1, 1);
+  squareColor = (color == 'black') ? vec4.fromValues(0, 0, 0, 0.5) : vec4.fromValues(1, 1, 1, 0.5);
   this.colors.push(squareColor, squareColor, squareColor, squareColor);
 
   var up = vec3.fromValues(0, 1, 0);
