@@ -13,7 +13,9 @@ class RigidBody
 
   applyFriction: (coeff) ->
     friction = vec3.clone(@velocity)
-    vec3.multiply(friction, friction, vec3.fromValues(-1, -1, -1))
+    # vec3.multiply(friction, friction, vec3.fromValues(-1, -1, -1))
+    vec3.negate(friction, friction)
+
     vec3.normalize(friction, friction)
     vec3.multiply(friction, friction, vec3.fromValues(coeff,coeff,coeff))
     @applyForce(friction)
@@ -32,7 +34,7 @@ class RigidBody
       @velocity[0] *= -1
       @renderable.position[0] = boundary
 
-    if @renderable.position[1] < -0
+    if @renderable.position[1] < 0
       @velocity[1] *= -1
       @renderable.position[1] = 0
     else if @renderable.position[1] > boundary

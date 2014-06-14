@@ -22,7 +22,7 @@
     RigidBody.prototype.applyFriction = function(coeff) {
       var friction;
       friction = vec3.clone(this.velocity);
-      vec3.multiply(friction, friction, vec3.fromValues(-1, -1, -1));
+      vec3.negate(friction, friction);
       vec3.normalize(friction, friction);
       vec3.multiply(friction, friction, vec3.fromValues(coeff, coeff, coeff));
       return this.applyForce(friction);
@@ -44,7 +44,7 @@
         this.velocity[0] *= -1;
         this.renderable.position[0] = boundary;
       }
-      if (this.renderable.position[1] < -0) {
+      if (this.renderable.position[1] < 0) {
         this.velocity[1] *= -1;
         this.renderable.position[1] = 0;
       } else if (this.renderable.position[1] > boundary) {
