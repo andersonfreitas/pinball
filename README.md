@@ -2,20 +2,21 @@
 
 # Tarefas
 
- - [ ] Modelo
+ - **Modelo**
    - [ ] Esfera
    - [ ] Mesa
  - [ ] Texturas
  - [ ] Ilumonação Blinn-Phong
    - [ ] Shader altamente especular para a esfera?
- - [ ] Sombras
- - [ ] **Física**
+
+ - **Física**
    - [X] colisão dentro com plano
    - [X] colisão de várias bolinhas
    - [ ] bola mapeada com uma textura (bola de praia)
    - [ ] velociade angular (rotações)
  - [ ] Audio
- - [ ] Firulas
+ - **Firulas**
+   - [ ] Sombras
    - [ ] scanlines
    - [ ] mirror effect
    - [ ] god mode
