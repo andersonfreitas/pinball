@@ -41,7 +41,7 @@ class Particle
 
   applyFriction: (coeff) ->
 
-  checkForCollisions: (dt)->
+  checkForCollisions: (dt, particles)->
     direction = vec3.create() # n
     relative_velocity = vec3.create()
     vrn = 0.0
@@ -65,6 +65,32 @@ class Particle
 
         @renderable.position[1] = @radius
         @colliding = true
+
+    for particle in particles
+      r = @radius + particle.radius
+      d = vec3.create()
+      # d = position - other.position
+      vec3.sub(d, @renderable.position, particle.renderable.position)
+
+      s = vec3.length(d) - r
+
+      if s <= 0.0
+        vec3.normalize(d, d)
+        direction = d
+        vec3.sub(relative_velocity, @velocity, particle.velocity)
+        vrn = vec3.dot(relative_velocity, direction)
+
+        if vrn < 0.0
+          impulse = -vrn * (0.6 + 1) / (1 / @mass + 1 / particle.mass)
+          Fi = vec3.clone(direction)
+          vec3.scale(Fi, Fi, impulse/dt)
+          vec3.add(@impactForces, @impactForces, Fi)
+
+          pos = vec3.create()
+          vec3.scale(pos, direction, s)
+          vec3.sub(@renderable.position, @renderable.position, pos)
+
+          @colliding = true
 
   ###
   dt = time step
