@@ -34,7 +34,7 @@ class Particle
       vec3.negate(drag, @velocity)
       vec3.normalize(drag, drag)
 
-      fDrag = 0.5 * AIR_DENSITY * @speed * @speed * (π * @radius * @radius) * 0.6
+      fDrag = 0.5 * AIR_DENSITY * @speed * @speed * π * @radius * @radius * 0.6
       # fDrag = 1
       vec3.scale(drag, drag, fDrag)
       vec3.add(@forces, @forces, drag)
@@ -58,9 +58,8 @@ class Particle
       vrn = vec3.dot(relative_velocity, direction)
 
       if vrn < 0.0
-        impulse = -(vec3.dot(relative_velocity, direction)) * (0.60 + 1) + @mass
-        # impulse = -(vec3.dot(relative_velocity, direction)) * (0.60) + @mass
-        Fi = direction
+        impulse = -vrn * (0.60 + 1) / (1 / @mass)
+        Fi = vec3.clone(direction)
         vec3.scale(Fi, Fi, impulse/dt)
         vec3.add(@impactForces, @impactForces, Fi)
 

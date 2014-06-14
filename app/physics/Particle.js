@@ -39,7 +39,7 @@ Particle Physics
         drag = vec3.create();
         vec3.negate(drag, this.velocity);
         vec3.normalize(drag, drag);
-        fDrag = 0.5 * AIR_DENSITY * this.speed * this.speed * (π * this.radius * this.radius) * 0.6;
+        fDrag = 0.5 * AIR_DENSITY * this.speed * this.speed * π * this.radius * this.radius * 0.6;
         vec3.scale(drag, drag, fDrag);
         return vec3.add(this.forces, this.forces, drag);
       }
@@ -47,8 +47,8 @@ Particle Physics
 
     Particle.prototype.applyFriction = function(coeff) {};
 
-    Particle.prototype.checkForCollisions = function(dt) {
-      var Fi, direction, impulse, relative_velocity, vrn;
+    Particle.prototype.checkForCollisions = function(dt, particles) {
+      var Fi, d, direction, impulse, particle, pos, r, relative_velocity, s, vrn, _i, _len, _results;
       direction = vec3.create();
       relative_velocity = vec3.create();
       vrn = 0.0;
@@ -61,14 +61,43 @@ Particle Physics
         relative_velocity = this.velocity;
         vrn = vec3.dot(relative_velocity, direction);
         if (vrn < 0.0) {
-          impulse = -(vec3.dot(relative_velocity, direction)) * (0.60 + 1) + this.mass;
-          Fi = direction;
+          impulse = -vrn * (0.60 + 1) / (1 / this.mass);
+          Fi = vec3.clone(direction);
           vec3.scale(Fi, Fi, impulse / dt);
           vec3.add(this.impactForces, this.impactForces, Fi);
           this.renderable.position[1] = this.radius;
-          return this.colliding = true;
+          this.colliding = true;
         }
       }
+      _results = [];
+      for (_i = 0, _len = particles.length; _i < _len; _i++) {
+        particle = particles[_i];
+        r = this.radius + particle.radius;
+        d = vec3.create();
+        vec3.sub(d, this.renderable.position, particle.renderable.position);
+        s = vec3.length(d) - r;
+        if (s <= 0.0) {
+          vec3.normalize(d, d);
+          direction = d;
+          vec3.sub(relative_velocity, this.velocity, particle.velocity);
+          vrn = vec3.dot(relative_velocity, direction);
+          if (vrn < 0.0) {
+            impulse = -vrn * (0.6 + 1) / (1 / this.mass + 1 / particle.mass);
+            Fi = vec3.clone(direction);
+            vec3.scale(Fi, Fi, impulse / dt);
+            vec3.add(this.impactForces, this.impactForces, Fi);
+            pos = vec3.create();
+            vec3.scale(pos, direction, s);
+            vec3.sub(this.renderable.position, this.renderable.position, pos);
+            _results.push(this.colliding = true);
+          } else {
+            _results.push(void 0);
+          }
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     };
 
 
@@ -96,5 +125,3 @@ Particle Physics
   window.RigidBody = Particle;
 
 }).call(this);
-
-//# sourceMappingURL=Particle.map
