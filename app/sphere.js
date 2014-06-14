@@ -9,7 +9,7 @@
 
     function Sphere(radius) {
       this.radius = radius != null ? radius : 1.0;
-      Sphere.__super__.constructor.call(this, 'sphere2');
+      Sphere.__super__.constructor.call(this, 'sphere-radius1');
     }
 
     return Sphere;
