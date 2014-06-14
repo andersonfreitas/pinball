@@ -6,7 +6,7 @@
    - [ ] Esfera
    - [ ] Mesa
  - [ ] Texturas
- - [ ] Ilumonação Blinn-Phong
+ - [ ] Iluminação Blinn-Phong
    - [ ] Shader altamente especular para a esfera?
 
  - **Física**
