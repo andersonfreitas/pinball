@@ -5,10 +5,9 @@
  - **Modelo**
    - [ ] Esfera
    - [ ] Mesa
- - [ ] Texturas
- - [ ] Iluminação Blinn-Phong
+   - [ ] Texturas
+   - [ ] Iluminação Blinn-Phong
    - [ ] Shader altamente especular para a esfera?
-
  - **Física**
    - [X] colisão dentro com plano
    - [X] colisão de várias bolinhas
