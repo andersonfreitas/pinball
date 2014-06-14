@@ -67,15 +67,18 @@ var Pinball = (function() {
   function initScene() {
     function addToScene(object) { sceneGraph.push(object); return object; }
 
-    var sphere = new Sphere(2).updatePosition(-3,10,0);
-    var sphere2 = new Sphere(2).updatePosition(3,5,0);
-    addToScene(sphere);
-    addToScene(sphere2);
+    var count = 6;
+    for (var i = 0; i < count; i++) {
+      for (var j = 0; j < count; j++) {
+        for (var z = 0; z < count; z++) {
+          var sphere = new Sphere(1).updatePosition(-5 + i * 3 + Math.random(), 3 + j * 3 + Math.random(), -5 + z * 3 + Math.random());
+          addToScene(sphere);
+          physicsWorld.push(new RigidBody(sphere, 2.0, 1.0));
+        }
+      }
+    }
 
     addToScene(new ObjFile('plane'));
-
-    physicsWorld.push(new RigidBody(sphere, 10.0, 1.0));
-    physicsWorld.push(new RigidBody(sphere2, 2.0, 1.0));
 
     return sceneGraph;
   }
@@ -187,7 +190,7 @@ var Pinball = (function() {
       // obj.applyForce(wind);
       obj.applyForce(gravity);
       obj.applyFriction(0.01);
-      obj.checkForCollisions(1/10);
+      obj.checkForCollisions(1/10, physicsWorld);
       obj.update(1/10);
     };
 
