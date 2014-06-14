@@ -67,5 +67,3 @@
   window.RigidBody = RigidBody;
 
 }).call(this);
-
-//# sourceMappingURL=RigidBody.map
