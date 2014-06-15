@@ -188,9 +188,9 @@ var Pinball = (function() {
       obj = physicsWorld[i];
 
       // obj.applyForce(wind);
+      obj.checkForCollisions(1/10, physicsWorld);
       obj.applyForce(gravity);
       obj.applyFriction(0.01);
-      obj.checkForCollisions(1/10, physicsWorld);
       obj.update(1/10);
     };
 
@@ -249,7 +249,8 @@ var Pinball = (function() {
     init: init,
     initScene: initScene,
     properties: properties,
-    sceneGraph: sceneGraph
+    sceneGraph: sceneGraph,
+    physicsWorld: physicsWorld
   };
 })();
 
