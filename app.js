@@ -86,8 +86,8 @@ var Pinball = (function() {
     */
 
     // addToScene(new ObjFile('plane', ''));
-    addToScene(new ObjFile('skybox', 'skyboxGround_Circle', 'assets/obj/ground.jpg'));
-    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere', 'assets/obj/sky.jpg'));
+    addToScene(new ObjFile('skybox', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
+    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
 
     return sceneGraph;
   }
