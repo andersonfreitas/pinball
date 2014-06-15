@@ -19,3 +19,5 @@
   window.Sphere = Sphere;
 
 }).call(this);
+
+//# sourceMappingURL=sphere.map

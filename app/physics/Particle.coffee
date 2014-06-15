@@ -5,7 +5,8 @@ Particle Physics
 ###
 
 class Particle
-  AIR_DENSITY = 1.23
+  AIR_DENSITY = 1.225 # kg/m^3 at 15ºC
+
   constructor: (@renderable, @mass, @radius) ->
     @renderable
     @mass
@@ -34,8 +35,7 @@ class Particle
       vec3.negate(drag, @velocity)
       vec3.normalize(drag, drag)
 
-      fDrag = 0.5 * AIR_DENSITY * @speed * @speed * π * @radius * @radius * 0.6
-      # fDrag = 1
+      fDrag = 0.5 * AIR_DENSITY * @speed * (2*π) * (@radius * @radius) * 0.7
       vec3.scale(drag, drag, fDrag)
       vec3.add(@forces, @forces, drag)
 
@@ -67,16 +67,11 @@ class Particle
         @colliding = true
 
     for particle in particles
-      r = @radius + particle.radius
-      d = vec3.create()
-      # d = position - other.position
-      vec3.sub(d, @renderable.position, particle.renderable.position)
-
-      s = vec3.length(d) - r
-
-      if s <= 0.0
-        vec3.normalize(d, d)
-        direction = d
+      distance = vec3.distance(@renderable.position, particle.renderable.position)
+      separation = distance - @radius + particle.radius
+      if separation <= 0.0
+        vec3.normalize(distance, distance)
+        direction = distance
         vec3.sub(relative_velocity, @velocity, particle.velocity)
         vrn = vec3.dot(relative_velocity, direction)
 
@@ -87,7 +82,7 @@ class Particle
           vec3.add(@impactForces, @impactForces, Fi)
 
           pos = vec3.create()
-          vec3.scale(pos, direction, s)
+          vec3.scale(pos, direction, separation)
           vec3.sub(@renderable.position, @renderable.position, pos)
 
           @colliding = true
