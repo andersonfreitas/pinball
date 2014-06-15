@@ -9,7 +9,6 @@ ObjFile.prototype = new BaseObject();
 ObjFile.prototype.constructor = ObjFile;
 
 ObjFile.prototype.onLoad = function(_, contents) {
-  this.loadModelFromObj2(contents, this.name);
-  // this.loadModelFromObj(contents);
+  this.loadModelFromObj(contents, this.name);
   this.initBuffers();
 };
