@@ -39,3 +39,4 @@
     https://github.com/chandlerprall/Physijs
     https://github.com/hughsk/dot-obj
     https://github.com/gl-modules/gl-now
+    http://www.mathematik.uni-marburg.de/~thormae/lectures/graphics1/code/WebGLShaderLightMat/ShaderLightMat.html
