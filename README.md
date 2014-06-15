@@ -9,7 +9,8 @@
    - [ ] Iluminação Blinn-Phong
    - [ ] Shader altamente especular para a esfera?
  - **Física**
-   - [X] colisão dentro com plano
+   - [X] colisão dentro com plano do jeito correto (olhando as normais)
+   - [ ] fazer a bola rolar numa plano inclinado (10º)
    - [X] colisão de várias bolinhas
    - [ ] bola mapeada com uma textura (bola de praia)
    - [ ] velociade angular (rotações)
