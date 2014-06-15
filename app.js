@@ -37,7 +37,7 @@ var Pinball = (function() {
       shadows: false,
       wireframe: false,
       lightning: true,
-      zoom: 2,
+      zoom: 0.1,
       diffuseLight: '#ccc'
     }
   };
