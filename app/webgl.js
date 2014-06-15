@@ -21,7 +21,7 @@ var WebGL = (function() {
       console.error('cannot create webgl context');
     }
 
-    currentProgram = initShaders('assets/shaders/shader.vsh', 'assets/shaders/shader.fsh');
+    currentProgram = initShaders('assets/shaders/shader2.vsh', 'assets/shaders/shader2.fsh');
 
     gl.clearColor(0.98, 0.98, 0.98, 1.0);
     gl.enable(gl.DEPTH_TEST);
