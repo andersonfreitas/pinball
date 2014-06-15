@@ -85,9 +85,9 @@ var Pinball = (function() {
 
     */
 
-    addToScene(new ObjFile('plane', ''));
-    addToScene(new ObjFile('skybox', 'skyboxGround_Circle'));
-    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere'));
+    // addToScene(new ObjFile('plane', ''));
+    addToScene(new ObjFile('skybox', 'skyboxGround_Circle', 'assets/obj/ground.jpg'));
+    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere', 'assets/obj/sky.jpg'));
 
     return sceneGraph;
   }
@@ -96,15 +96,14 @@ var Pinball = (function() {
     currentProgram.vertexPositionAttribute = gl.getAttribLocation(currentProgram, 'aVertexPosition');
     gl.enableVertexAttribArray(currentProgram.vertexPositionAttribute);
 
-    currentProgram.vertexColorAttribute = gl.getAttribLocation(currentProgram, 'aVertexColor');
-    gl.enableVertexAttribArray(currentProgram.vertexColorAttribute);
-
     currentProgram.vertexNormalAttribute = gl.getAttribLocation(currentProgram, 'aVertexNormal');
     gl.enableVertexAttribArray(currentProgram.vertexNormalAttribute);
 
+    currentProgram.textureCoordAttribute = gl.getAttribLocation(currentProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(currentProgram.textureCoordAttribute);
+
     currentProgram.pMatrixUniform = gl.getUniformLocation(currentProgram, 'uPMatrix');
     currentProgram.mvMatrixUniform = gl.getUniformLocation(currentProgram, 'uMVMatrix');
-
     currentProgram.normalMat = gl.getUniformLocation(currentProgram, 'normalMat');
 
     gl.useProgram(currentProgram);
