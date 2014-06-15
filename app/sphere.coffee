@@ -7,3 +7,4 @@ window.Sphere = Sphere
 window.Skybox = class Skybox extends ObjFile
   constructor: ->
     super('skybox', 'skyboxGround_Circle')
+
