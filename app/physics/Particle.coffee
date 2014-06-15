@@ -67,8 +67,13 @@ class Particle
         @colliding = true
 
     for particle in particles
-      distance = vec3.distance(@renderable.position, particle.renderable.position)
-      separation = distance - @radius + particle.radius
+      r = @radius + particle.radius
+      distance = vec3.create()
+      # distance = position - other.position
+      vec3.sub(distance, @renderable.position, particle.renderable.position)
+
+      separation = vec3.length(distance) - r
+
       if separation <= 0.0
         vec3.normalize(distance, distance)
         direction = distance

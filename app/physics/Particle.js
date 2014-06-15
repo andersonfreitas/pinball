@@ -48,7 +48,7 @@ Particle Physics
     Particle.prototype.applyFriction = function(coeff) {};
 
     Particle.prototype.checkForCollisions = function(dt, particles) {
-      var Fi, direction, distance, impulse, particle, pos, relative_velocity, separation, vrn, _i, _len, _results;
+      var Fi, direction, distance, impulse, particle, pos, r, relative_velocity, separation, vrn, _i, _len, _results;
       direction = vec3.create();
       relative_velocity = vec3.create();
       vrn = 0.0;
@@ -72,8 +72,10 @@ Particle Physics
       _results = [];
       for (_i = 0, _len = particles.length; _i < _len; _i++) {
         particle = particles[_i];
-        distance = vec3.distance(this.renderable.position, particle.renderable.position);
-        separation = distance - this.radius + particle.radius;
+        r = this.radius + particle.radius;
+        distance = vec3.create();
+        vec3.sub(distance, this.renderable.position, particle.renderable.position);
+        separation = vec3.length(distance) - r;
         if (separation <= 0.0) {
           vec3.normalize(distance, distance);
           direction = distance;
