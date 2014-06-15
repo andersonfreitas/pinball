@@ -1,5 +1,3 @@
-float PI = 3.14159265358979323846264;
-
 // attribute vec3 aVertexPosition;
 // attribute vec4 aVertexColor;
 // attribute vec3 aVertexNormal;
@@ -26,25 +24,18 @@ float PI = 3.14159265358979323846264;
 //   }
 // }
 
-attribute vec4 aVertexPosition;
-attribute vec4 aVertexNormal;
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
 
-uniform mat4 uMVMatrix;
-uniform vec4 LightPosition;
-uniform mat4 uPMatrix;
+uniform mat4 uPMatrix, uMVMatrix, normalMat;
 
-varying vec3 N;
-varying vec3 L;
-varying vec3 E;
+varying vec3 normalInterp;
+varying vec3 vertPos;
+varying vec4 vColor;
 
 void main() {
-  gl_Position = uPMatrix * uMVMatrix * aVertexPosition;
-
-  N = aVertexNormal.xyz;
-
-  L = LightPosition.xyz - aVertexPosition.xyz;
-  if (LightPosition.w == 0.0)
-    L = LightPosition.xyz;
-
-  E = aVertexPosition.xyz;
+  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+  vec4 vertPos4 = uMVMatrix * vec4(aVertexPosition, 1.0);
+  vertPos = vec3(vertPos4) / vertPos4.w;
+  normalInterp = vec3(normalMat * vec4(aVertexNormal, 0.0));
 }

@@ -1,32 +1,32 @@
 precision mediump float;
 
-uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
-uniform mat4 uMVMatrix;
-uniform vec4 LightPosition;
-uniform float Shininess;
+varying vec3 normalInterp;
+varying vec3 vertPos;
 
-varying vec3 N;
-varying vec3 L;
-varying vec3 E;
+const vec3 lightPos = vec3(1.0,1.0,1.0);
+const vec3 ambientColor = vec3(0.1, 0.0, 0.0);
+const vec3 diffuseColor = vec3(0.5, 0.0, 0.0);
+const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 void main() {
-    vec3 NN = normalize(N);
-    vec3 EE = normalize(E);
-    vec3 LL = normalize(L);
 
-    vec4 ambient, diffuse, specular;
+  vec3 normal = normalize(normalInterp);
+  vec3 lightDir = normalize(lightPos - vertPos);
 
-    vec3 H = normalize(LL+EE);
-    float Kd = max(dot(LL, NN), 0.0);
-    Kd = dot(LL, NN);
+  float lambertian = max(dot(lightDir,normal), 0.0);
+  float specular = 0.0;
 
-    float Ks = pow(max(dot(NN, H), 0.0), Shininess);
-    ambient = AmbientProduct;
-    diffuse = Kd*DiffuseProduct;
+  if(lambertian > 0.0) {
 
-    if (dot(LL, NN) < 0.0)
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
-    else specular = Ks*SpecularProduct;
+    vec3 viewDir = normalize(-vertPos);
 
-    gl_FragColor = vec4((ambient + diffuse + specular).xyz, 1.0);
+    // this is blinn phong
+    vec3 halfDir = normalize(lightDir + viewDir);
+    float specAngle = max(dot(halfDir, normal), 0.0);
+    specular = pow(specAngle, 16.0);
+  }
+
+  gl_FragColor = vec4(ambientColor +
+                      lambertian * diffuseColor +
+                      specular * specColor, 1.0);
 }

@@ -26,6 +26,10 @@ var Pinball = (function() {
   function setMatrixUniforms() {
     gl.uniformMatrix4fv(currentProgram.pMatrixUniform, false, pMatrix);
     gl.uniformMatrix4fv(currentProgram.mvMatrixUniform, false, mvMatrix);
+
+    invert = mat4.invert(mat4.create(), mvMatrix);
+    normalmatrix = mat4.transpose(mat4.create(), invert);
+    gl.uniformMatrix4fv(currentProgram.normalMat, false, normalmatrix);
   }
 
   var properties = {
@@ -95,6 +99,8 @@ var Pinball = (function() {
 
     currentProgram.pMatrixUniform = gl.getUniformLocation(currentProgram, 'uPMatrix');
     currentProgram.mvMatrixUniform = gl.getUniformLocation(currentProgram, 'uMVMatrix');
+
+    currentProgram.normalMat = gl.getUniformLocation(currentProgram, 'normalMat');
 
     gl.useProgram(currentProgram);
     currentProgram.u_DiffuseLight = gl.getUniformLocation(currentProgram, 'u_DiffuseLight');
