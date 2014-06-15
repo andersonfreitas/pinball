@@ -2,11 +2,16 @@ attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 // attribute vec4 aVertexColor;
 
+attribute vec2 aTextureCoord;
+
+uniform bool enableLight;
+
 uniform mat4 uPMatrix, uMVMatrix, normalMat;
 
 varying vec3 normalInterp;
 varying vec3 vertPos;
 // varying vec4 vColor;
+varying vec2 vTextureCoord;
 
 void main() {
   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
@@ -15,4 +20,5 @@ void main() {
   normalInterp = vec3(normalMat * vec4(aVertexNormal, 0.0));
 
   // vColor = aVertexColor;
+  vTextureCoord = aTextureCoord;
 }

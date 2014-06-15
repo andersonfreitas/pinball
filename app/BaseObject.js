@@ -4,7 +4,7 @@ function BaseObject() {
 
   this.vertexBuffer = 0;
   this.normalBuffer = 0;
-  this.colorBuffer = 0;
+  this.textureBuffer = 0;
   this.indexBuffer = 0;
 
   this.normalsBase = [];
@@ -15,8 +15,7 @@ function BaseObject() {
   this.colors = [];
   this.normals = [];
   this.indices = [];
-
-  this.color = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+  this.textureCoords = [];
 
   this.animationTime = 0;
 }
@@ -47,11 +46,11 @@ BaseObject.prototype.initBuffers = function() {
   this.vertexBuffer.itemSize = 3;
   this.vertexBuffer.numItems = this.vertices.length;
 
-  // this.colorBuffer = gl.createBuffer();
-  // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(_.flatten(this.colors)), gl.STATIC_DRAW);
-  // this.colorBuffer.itemSize = 4;
-  // this.colorBuffer.numItems = this.colors.length;
+  this.textureBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(_.flatten(this.textureCoords)), gl.STATIC_DRAW);
+  this.textureBuffer.itemSize = 2;
+  this.textureBuffer.numItems = this.textureCoords.length;
 
   this.normalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
@@ -146,7 +145,7 @@ BaseObject.prototype.loadModelFromObj = function(data, objName) {
     this.indices = selected.indexes;
     this.vertices = selected.v;
     this.normals = selected.n;
-    // this.texture = selected.t;
+    this.textureCoords = selected.t;
   }
 };
 
@@ -154,18 +153,20 @@ BaseObject.prototype.render = function() {
   if (this.vertexBuffer === 0)
     return;
 
-  // gl.depthMask(false);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
   gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-  // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-  // gl.vertexAttribPointer(currentProgram.vertexColorAttribute, this.colorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
   gl.vertexAttribPointer(currentProgram.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+  gl.vertexAttribPointer(currentProgram.textureCoordAttribute, this.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+  gl.activeTexture(this.textureIndex);
+  gl.bindTexture(gl.TEXTURE_2D, this.texture);
+  gl.uniform1i(currentProgram.samplerUniform, 0);
 
   if (Pinball.properties.scene.wireframe) {
     gl.drawElements(gl.LINE_STRIP, this.indices.length, gl.UNSIGNED_SHORT, 0);
