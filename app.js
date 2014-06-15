@@ -71,7 +71,8 @@ var Pinball = (function() {
   function initScene() {
     function addToScene(object) { sceneGraph.push(object); return object; }
 
-    var count = 6;
+/*
+    var count = 2;
     for (var i = 0; i < count; i++) {
       for (var j = 0; j < count; j++) {
         for (var z = 0; z < count; z++) {
@@ -82,7 +83,11 @@ var Pinball = (function() {
       }
     }
 
-    addToScene(new ObjFile('plane'));
+    */
+
+    addToScene(new ObjFile('plane', ''));
+    addToScene(new ObjFile('skybox', 'skyboxGround_Circle'));
+    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere'));
 
     return sceneGraph;
   }
