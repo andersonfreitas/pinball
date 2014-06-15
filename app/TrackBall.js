@@ -12,7 +12,7 @@
     function TrackBall(canvas) {
       this.canvas = canvas;
 
-      that = this;
+      var that = this;
 
       this.currentAngle = [0.0, 0.0];
 
