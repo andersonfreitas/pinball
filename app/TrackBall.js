@@ -45,7 +45,7 @@
 
           zoom = Pinball.properties.scene.zoom + dy;
 
-          Pinball.properties.scene.zoom = Math.max(Math.min(zoom, 8), 0.2);
+          Pinball.properties.scene.zoom = Math.max(Math.min(zoom, 8), 0);
         }
         if (ev.which === 1 || ev.button === 0) {
           var factor = 100 / this.canvas.height;
