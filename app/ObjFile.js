@@ -3,12 +3,9 @@ function ObjFile(file, name, textureName) {
   this.name = name;
   this.textureName = textureName;
   this.texture = 0;
-  this.textureIndex = 0;
 
   Utils.loadRemoteFile(this, 'assets/obj/' + file + '.obj', this.onLoad);
 }
-
-var globalTextureCount = 0;
 
 ObjFile.prototype = new BaseObject();
 
@@ -28,13 +25,6 @@ ObjFile.prototype.initTexture = function() {
   this.texture.image = new Image();
 
   var that = this;
-
-  if (globalTextureCount === 0) {
-    globalTextureCount = gl.TEXTURE0;
-    this.textureIndex = gl.TEXTURE0;
-  } else {
-    this.textureIndex = globalTextureCount++;
-  }
 
   this.texture.image.onload = function() {
      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);

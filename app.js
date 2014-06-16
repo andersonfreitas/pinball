@@ -82,12 +82,17 @@ var Pinball = (function() {
         }
       }
     }
-
     */
 
     // addToScene(new ObjFile('plane', ''));
-    addToScene(new ObjFile('skybox', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
-    addToScene(new ObjFile('skybox', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
+    addToScene(new ObjFile('skyboxGround_circle', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
+    addToScene(new ObjFile('skyboxDome_sphere', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
+
+    var paleta = new ObjFile('paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg');
+    // addToScene(new ObjFile('obs-esq', 'obs-tri-esq_Mesh', 'assets/images/madeira.jpg'));
+    // paleta.updatePosition(0.10022,0.07392,0.38787);
+
+    addToScene(paleta);
 
     return sceneGraph;
   }
@@ -148,8 +153,14 @@ var Pinball = (function() {
       obj = sceneGraph[i];
 
       mvPushMatrix();
+
+      var negate = vec3.negate(vec3.create(), obj.position);
+      mat4.translate(mvMatrix, mvMatrix, negate);
+      mat4.rotateX(mvMatrix, mvMatrix, obj.rotation[0]*π/180);
       mat4.rotateY(mvMatrix, mvMatrix, obj.rotation[1]*π/180);
+      mat4.rotateZ(mvMatrix, mvMatrix, obj.rotation[2]*π/180);
       mat4.translate(mvMatrix, mvMatrix, obj.position);
+
       setMatrixUniforms();
 
       obj.render();
@@ -161,8 +172,8 @@ var Pinball = (function() {
   function setupCameraPosition() {
     mat4.identity(mvMatrix);
     zoom = 12 * properties.scene.zoom;
-    eye = vec3.fromValues(zoom, zoom, zoom);
-    at = vec3.fromValues(0, 0, 0);
+    eye = vec3.fromValues(0.0, 0.3, zoom);
+    at = vec3.fromValues(0.0, 0.0, 0.0);
     up = vec3.fromValues(0, 1, 0);
     mat4.lookAt(mvMatrix, eye, at, up);
   }
@@ -176,8 +187,8 @@ var Pinball = (function() {
       for (var i = sceneGraph.length - 1; i >= 0; i--) {
         obj = sceneGraph[i];
 
-        if (i === 0) {
-          // obj.rotate(vec3.fromValues(1, x+=1, 1));
+        if (i === 2) {
+          obj.rotate(vec3.fromValues(1, x++, 1));
         }
 
         obj.updateAnimation(elapsed);
@@ -218,7 +229,7 @@ var Pinball = (function() {
     mat4.identity(pMatrix);
     var ratio = gl.viewportWidth / gl.viewportHeight;
 
-    mat4.perspective(pMatrix, 45, ratio, 1, 100);
+    mat4.perspective(pMatrix, 45, ratio, 0.3, 100);
     setMatrixUniforms();
   }
 

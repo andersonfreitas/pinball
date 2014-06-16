@@ -164,7 +164,7 @@ BaseObject.prototype.render = function() {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
   gl.vertexAttribPointer(currentProgram.textureCoordAttribute, this.textureBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-  gl.activeTexture(this.textureIndex);
+  // gl.activeTexture(this.textureIndex);
   gl.bindTexture(gl.TEXTURE_2D, this.texture);
   gl.uniform1i(currentProgram.samplerUniform, 0);
 
