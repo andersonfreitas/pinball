@@ -278,7 +278,7 @@ var Pinball = (function() {
       var elapsed = timeNow - lastTime;
 
       for (var i = sceneGraph.length - 1; i >= 0; i--) {
-        obj = sceneGraph[i];
+        var obj = sceneGraph[i];
         obj.updateAnimation(elapsed);
       }
     }
@@ -293,7 +293,7 @@ var Pinball = (function() {
       var gravity = vec3.fromValues(0, 0, -9.81 /* m^s */);
 
       for (var i = 0; i < dynamicSpheres.length; i++) {
-        obj = dynamicSpheres[i];
+        var obj = dynamicSpheres[i];
 
         obj.checkForCollisions(1/10, staticObjects, dynamicSpheres);
         obj.applyForce(gravity);
