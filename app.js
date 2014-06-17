@@ -253,18 +253,14 @@ var Pinball = (function() {
     requestAnimationFrame(animate);
     stats.begin();
 
-    var gravity = vec3.fromValues(0, -9.81, 0);
-    // var gravity = vec3.fromValues(0, -0.05, 0);
-    var wind = vec3.fromValues(0.001, 0, 0.001);
+    var gravity = vec3.fromValues(0, 0, -9.81 /* m^s */);
 
-    for (var i = 0; i < physicsWorld.length; i++) {
-      obj = physicsWorld[i];
+    for (var i = 0; i < dynamicSpheres.length; i++) {
+      obj = dynamicSpheres[i];
 
-      // obj.applyForce(wind);
-      obj.checkForCollisions(1/10, physicsWorld);
+      obj.checkForCollisions(1/10, staticObjects, dynamicSpheres);
       obj.applyForce(gravity);
-      obj.applyFriction(0.01);
-      obj.update(1/10);
+      obj.update(1/30);
     };
 
     updateAnimationTime();
@@ -274,11 +270,16 @@ var Pinball = (function() {
   }
 
   var sceneGraph = [];
-  var physicsWorld = [];
+  var dynamicSpheres = [];
+  var staticObjects = [];
   var objects = {}
 
   function initScene() {
-    function addToScene(object) { sceneGraph.push(object); return object; }
+    function addToScene(object) {
+      staticObjects.push(object);
+      sceneGraph.push(object);
+      return object;
+    }
 
 /*
     var count = 2;
@@ -293,13 +294,18 @@ var Pinball = (function() {
     }
 */
 
-    addToScene(new ObjFile('ground', 'ground', 'assets/images/ground.jpg'));
-    addToScene(new ObjFile('dome', 'dome', 'assets/images/sky.jpg'));
+    objects.esfera = new Sphere(0.015)
+    sceneGraph.push(objects.esfera);
 
+    objects.esfera.updatePosition(-0.3, 0.03, 0.4)
+
+    dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
+
+    sceneGraph.push(new ObjFile('ground', 'ground', 'assets/images/ground.jpg'));
+    sceneGraph.push(new ObjFile('dome', 'dome', 'assets/images/sky.jpg'));
 
     addToScene(new ObjFile('cilindro-1', 'cilindro-1', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('cilindro-2', 'cilindro-2', 'assets/images/madeira.jpg'));
-    addToScene(new ObjFile('esfera', 'esfera', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('mesa-base', 'mesa-base', 'assets/images/madeira-escura.jpg'));
     addToScene(new ObjFile('mesa-lancador', 'mesa-lancador', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('mesa-obs-1', 'mesa-obs-1', 'assets/images/madeira.jpg'));
@@ -329,7 +335,7 @@ var Pinball = (function() {
     properties: properties,
     objects: objects,
     sceneGraph: sceneGraph,
-    physicsWorld: physicsWorld
+    dynamicSpheres: dynamicSpheres
   };
 })();
 
