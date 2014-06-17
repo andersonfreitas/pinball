@@ -64,42 +64,6 @@ var Pinball = (function() {
     gl.uniform3f(currentProgram.u_DiffuseLight, color.r, color.g, color.b);
   });
 
-  var sceneGraph = [];
-
-  var physicsWorld = [];
-
-  function initScene() {
-    function addToScene(object) { sceneGraph.push(object); return object; }
-
-/*
-    var count = 2;
-    for (var i = 0; i < count; i++) {
-      for (var j = 0; j < count; j++) {
-        for (var z = 0; z < count; z++) {
-          var sphere = new Sphere(1).updatePosition(-5 + i * 3 + Math.random(), 3 + j * 3 + Math.random(), -5 + z * 3 + Math.random());
-          addToScene(sphere);
-          physicsWorld.push(new RigidBody(sphere, 2.0, 1.0));
-        }
-      }
-    }
-    */
-
-    // addToScene(new ObjFile('plane', ''));
-    addToScene(new ObjFile('skyboxGround_circle', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
-    addToScene(new ObjFile('skyboxDome_sphere', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
-
-    var paleta = new ObjFile('paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg')
-    paleta.updatePosition(0,0,-0.5);
-    addToScene(paleta);
-
-
-    addToScene(new ObjFile('mesa-obs1', 'mesa-obs-1_Mesh.008', 'assets/images/madeira.jpg'));
-    addToScene(new ObjFile('mesa-outer', 'mesa-outer_Mesh.003', 'assets/images/madeira.jpg'));
-    addToScene(new ObjFile('bola', 'esfera_mesh', 'assets/images/foiled.jpg').updatePosition(0,0.015,0));
-
-    return sceneGraph;
-  }
-
   function initShaderVars() {
     currentProgram.vertexPositionAttribute = gl.getAttribLocation(currentProgram, 'aVertexPosition');
     gl.enableVertexAttribArray(currentProgram.vertexPositionAttribute);
@@ -170,58 +134,6 @@ var Pinball = (function() {
     }
   }
 
-  function setupCameraPosition() {
-    mat4.identity(mvMatrix);
-    zoom = 12 * properties.scene.zoom;
-    eye = vec3.fromValues(0.02323, 0.48135, -0.9366);
-    at = vec3.fromValues(0.0, 0.0, 0.0);
-    up = vec3.fromValues(0, 1, 0);
-    mat4.lookAt(mvMatrix, eye, at, up);
-  }
-
-  var x = 0;
-  function updateAnimationTime() {
-    var timeNow = new Date().getTime();
-    if (lastTime !== 0) {
-      var elapsed = timeNow - lastTime;
-
-      for (var i = sceneGraph.length - 1; i >= 0; i--) {
-        obj = sceneGraph[i];
-
-        if (i === 2) {
-          obj.rotate(vec3.fromValues(1, x++, 1));
-        }
-
-        obj.updateAnimation(elapsed);
-      }
-    }
-    lastTime = timeNow;
-  }
-
-  function animate() {
-    requestAnimationFrame(animate);
-    stats.begin();
-
-    var gravity = vec3.fromValues(0, -9.81, 0);
-    // var gravity = vec3.fromValues(0, -0.05, 0);
-    var wind = vec3.fromValues(0.001, 0, 0.001);
-
-    for (var i = 0; i < physicsWorld.length; i++) {
-      obj = physicsWorld[i];
-
-      // obj.applyForce(wind);
-      obj.checkForCollisions(1/10, physicsWorld);
-      obj.applyForce(gravity);
-      obj.applyFriction(0.01);
-      obj.update(1/10);
-    };
-
-    updateAnimationTime();
-    render();
-
-    stats.end();
-  }
-
   function updateLightning(enable) {
     gl.uniform1i(gl.getUniformLocation(currentProgram, 'enableLight'), enable);
   }
@@ -257,13 +169,94 @@ var Pinball = (function() {
 
   function onWindowResize(event) {
     var canvas = WebGL.getCanvas();
-    canvas.width = 640;//window.innerWidth;
-    canvas.height = 480;//window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     gl.viewportWidth = canvas.width;
     gl.viewportHeight = canvas.height;
 
     updateProjection();
+  }
+
+  var sceneGraph = [];
+
+  var physicsWorld = [];
+  function setupCameraPosition() {
+    mat4.identity(mvMatrix);
+    zoom = 12 * properties.scene.zoom;
+    eye = vec3.fromValues(0.02323, 0.48135, -0.9366);
+    at = vec3.fromValues(0.0, 0.0, 0.0);
+    up = vec3.fromValues(0, 1, 0);
+    mat4.lookAt(mvMatrix, eye, at, up);
+  }
+
+  function updateAnimationTime() {
+    var timeNow = new Date().getTime();
+    if (lastTime !== 0) {
+      var elapsed = timeNow - lastTime;
+
+      for (var i = sceneGraph.length - 1; i >= 0; i--) {
+        obj = sceneGraph[i];
+        obj.updateAnimation(elapsed);
+      }
+    }
+    lastTime = timeNow;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    stats.begin();
+
+    var gravity = vec3.fromValues(0, -9.81, 0);
+    // var gravity = vec3.fromValues(0, -0.05, 0);
+    var wind = vec3.fromValues(0.001, 0, 0.001);
+
+    for (var i = 0; i < physicsWorld.length; i++) {
+      obj = physicsWorld[i];
+
+      // obj.applyForce(wind);
+      obj.checkForCollisions(1/10, physicsWorld);
+      obj.applyForce(gravity);
+      obj.applyFriction(0.01);
+      obj.update(1/10);
+    };
+
+    updateAnimationTime();
+    render();
+
+    stats.end();
+  }
+
+  function initScene() {
+    function addToScene(object) { sceneGraph.push(object); return object; }
+
+/*
+    var count = 2;
+    for (var i = 0; i < count; i++) {
+      for (var j = 0; j < count; j++) {
+        for (var z = 0; z < count; z++) {
+          var sphere = new Sphere(1).updatePosition(-5 + i * 3 + Math.random(), 3 + j * 3 + Math.random(), -5 + z * 3 + Math.random());
+          addToScene(sphere);
+          physicsWorld.push(new RigidBody(sphere, 2.0, 1.0));
+        }
+      }
+    }
+*/
+
+    // addToScene(new ObjFile('plane', ''));
+    addToScene(new ObjFile('skyboxGround_circle', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
+    addToScene(new ObjFile('skyboxDome_sphere', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
+
+    var paleta = new ObjFile('paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg')
+    paleta.updatePosition(0,0,-0.5);
+    addToScene(paleta);
+
+
+    addToScene(new ObjFile('mesa-obs1', 'mesa-obs-1_Mesh.008', 'assets/images/madeira.jpg'));
+    addToScene(new ObjFile('mesa-outer', 'mesa-outer_Mesh.003', 'assets/images/madeira.jpg'));
+    addToScene(new ObjFile('bola', 'esfera_mesh', 'assets/images/foiled.jpg').updatePosition(0,0.015,0));
+
+    return sceneGraph;
   }
 
   // public methods
