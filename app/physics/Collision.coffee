@@ -19,6 +19,9 @@ scale = (a, scalar) ->
 scaleAndAdd = (vec, scalar) ->
   vec3.scaleAndAdd(vec3.create(), vec, vec3.fromValues(1,1,1), scalar)
 
+reflect = (vec, normal) ->
+  sub(vec, scale(normal, dot(vec, normal) * 2))
+
 Collision =
 
   testSphereAgainstFaces: (sphere, faces) ->
