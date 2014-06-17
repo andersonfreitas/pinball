@@ -193,14 +193,14 @@ var Pinball = (function() {
 
       if (event.keyCode >= 37 && event.keyCode <= 40) {
         var any = false;
-        for (_i = 0, _len = staticObjects.length; _i < _len; _i++) {
-          var obstacle = staticObjects[_i];
-          var collidingFace = Collision.testSphereAgainstFaces(objects.esfera, obstacle.faces);
-          if (collidingFace.collision) {
-            any = true;
-            break;
-          }
-        }
+        // for (_i = 0, _len = staticObjects.length; _i < _len; _i++) {
+        //   var obstacle = staticObjects[_i];
+        //   var collidingFace = Collision.testSphereAgainstFaces(objects.esfera, obstacle.faces);
+        //   if (collidingFace.collision) {
+        //     any = true;
+        //     break;
+        //   }
+        // }
         if (!any) {
           if (event.keyCode == 37) {
             objects.esfera.position[0] += 0.01;
@@ -222,6 +222,7 @@ var Pinball = (function() {
       }
       if (event.keyCode == 82) {
         objects.esfera.updatePosition(0, 0.016, 0.4)
+        dynamicSpheres[0].velocity = vec3.create()
       }
     };
     window.onkeyup = function(event) {
