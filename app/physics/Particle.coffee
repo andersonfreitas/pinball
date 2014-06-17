@@ -52,6 +52,12 @@ class Particle
     @impactForces = vec3.create()
 
     for obstacle in staticWorld
+      unless obstacle.adjusted
+        obstacle.adjusted = true
+        _.each obstacle.faces, (face, i) ->
+          _.each face.mesh, (vec, j) ->
+            obstacle.faces[i].mesh[j] = add(vec, obstacle.position)
+
       collidingFace = Collision.testSphereAgainstFaces(@sphere, obstacle.faces)
       if collidingFace.collision
         direction = collidingFace.normal

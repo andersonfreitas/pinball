@@ -50,6 +50,14 @@ Particle = (function() {
     this.impactForces = vec3.create();
     for (_i = 0, _len = staticWorld.length; _i < _len; _i++) {
       obstacle = staticWorld[_i];
+      if (!obstacle.adjusted) {
+        obstacle.adjusted = true;
+        _.each(obstacle.faces, function(face, i) {
+          return _.each(face.mesh, function(vec, j) {
+            return obstacle.faces[i].mesh[j] = add(vec, obstacle.position);
+          });
+        });
+      }
       collidingFace = Collision.testSphereAgainstFaces(this.sphere, obstacle.faces);
       if (collidingFace.collision) {
         direction = collidingFace.normal;
