@@ -1,5 +1,15 @@
 // http://jasmine.github.io/1.3/introduction.html
 
+Sphere = (function() {
+  function Sphere(radius, position) {
+    this.radius = radius;
+    this.position = position;
+  }
+
+  return Sphere;
+
+})();
+
 describe('OBJ Loader', function() {
   it('loads an obj with with correct count of faces', function(done) {
    var contents = "o Plane\n\
@@ -20,17 +30,15 @@ f 3/4/1 1/1/1 4/3/1";
 
     expect(obj.faces.length).toBe(2);
 
-    var c = new Collision();
-
     var face = obj.faces[0];
 
     var sphere1 = new Sphere(0.5, vec3.fromValues(0.0, 0.0, 0.0));
     var sphere2 = new Sphere(0.5, vec3.fromValues(0.0, 10.0, 0.0));
 
     // debugger
-    expect(c.testSphereFace(sphere1, face)).toBe(true);
-    expect(c.testSphereFace(sphere2, face)).toBe(false);
+    expect(Collision.testSphereFace(sphere1, face)).toBe(true);
+    expect(Collision.testSphereFace(sphere2, face)).toBe(false);
 
-    expect(c.testSphereAgainstFaces(sphere1, obj.faces)).toBe(true);
+    expect(Collision.testSphereAgainstFaces(sphere1, obj.faces)).toBe(true);
   });
 });
