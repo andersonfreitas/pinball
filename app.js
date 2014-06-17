@@ -321,19 +321,6 @@ var Pinball = (function() {
       return object;
     }
 
-/*
-    var count = 2;
-    for (var i = 0; i < count; i++) {
-      for (var j = 0; j < count; j++) {
-        for (var z = 0; z < count; z++) {
-          var sphere = new Sphere(1).updatePosition(-5 + i * 3 + Math.random(), 3 + j * 3 + Math.random(), -5 + z * 3 + Math.random());
-          addToScene(sphere);
-          physicsWorld.push(new RigidBody(sphere, 2.0, 1.0));
-        }
-      }
-    }
-*/
-
     objects.esfera = new Sphere(0.015)
     sceneGraph.push(objects.esfera);
 
