@@ -235,7 +235,7 @@ var Pinball = (function() {
     addToScene(objects.esfera);
     objects.esfera.updatePosition(0.0, 0.5, 0.0)
 
-    dynamicSpheres.push(new RigidBody(objects.esfera, 10.0));
+    dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
 
     objects.chao = new ObjFile('untitled', 'Plane', 'assets/images/ground.jpg')
     addToScene(objects.chao);
