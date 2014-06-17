@@ -1,6 +1,9 @@
 @Sphere = class
   constructor: (@radius, @position)->
 
+add = (a, b) ->
+  vec3.add(vec3.create(), a, b)
+
 sub = (a, b) ->
   vec3.sub(vec3.create(), a, b)
 
@@ -8,7 +11,7 @@ mul = (a, b) ->
   vec3.mul(vec3.create(), a, b)
 
 dot = (a, b) ->
-  vec3.dot(vec3.create(), a, b)
+  vec3.dot(a, b)
 
 cross = (a, b) ->
   vec3.cross(vec3.create(), a, b)
@@ -16,16 +19,26 @@ cross = (a, b) ->
 scale = (a, scalar) ->
   vec3.scale(vec3.create(), a, scalar)
 
+scaleAndAdd = (vec, scalar) ->
+  vec3.scaleAndAdd(vec3.create(), vec, vec3.fromValues(1,1,1), scalar)
+
 @Collision = class
+
+  testSphereFace: (sphere, face) ->
+    @testSphereTriangle(sphere, face[0], face[1], face[2])
+
   testSphereTriangle: (sphere, a, b, c) ->
     # Find point P on triangle ABC closest to sphere center
-    p = closestPointTriangle(sphere.position, a, b, c)
+    p = @closestPointTriangle(sphere.position, a, b, c)
 
     # Sphere and triangle intersect if the (squared) distance from sphere
     # center to point p is less than the (squared) sphere radius
     v = sub(p, sphere.position)
 
     return dot(v, v) <= sphere.radius * sphere.radius
+
+  closestPointFace: (p, face) ->
+    @closestPointTriangle(p, face[0], face[1], face[2])
 
   closestPointTriangle: (p, a, b, c) ->
     ab = sub(b, a)
@@ -63,7 +76,7 @@ scale = (a, scalar) ->
     # If P outside AB and within feature region of AB,
     # return projection of P onto AB
     if vc <= 0.0 && snom >= 0.0 && sdenom >= 0.0
-      return a + snom / (snom + sdenom) * ab
+      return add(a, scale(ab, snom / (snom + sdenom)))
 
     # P is outside (or on) BC if the triple scalar product [N PB PC] <= 0
     va = dot(n, cross(sub(b, p), sub(c, p)))
@@ -71,7 +84,7 @@ scale = (a, scalar) ->
     # If P outside BC and within feature region of BC,
     # return projection of P onto BC
     if va <= 0.0 && unom >= 0.0 && udenom >= 0.0
-      return b + unom / (unom + udenom) * bc
+      return add(b, scale(bc, unom / (unom + udenom)))
 
     # P is outside (or on) CA if the triple scalar product [N PC PA] <= 0
     vb = dot(n, cross(sub(c, p), sub(a, p)))
@@ -79,10 +92,10 @@ scale = (a, scalar) ->
     # If P outside CA and within feature region of CA,
     # return projection of P onto CA
     if vb <= 0.0 && tnom >= 0.0 && tdenom >= 0.0
-      return a + tnom / (tnom + tdenom) * ac
+      return add(a, scale(ac, tnom / (tnom + tdenom)))
 
     # P must project inside face region. Compute Q using barycentric coordinates
     u = va / (va + vb + vc)
     v = vb / (va + vb + vc)
     w = 1.0 - u - v # = vc/(va+vb+vc)
-    return u * a + v * b + w * c
+    return add(scale(a, u), add(scale(b, v),scale(c, w)))
