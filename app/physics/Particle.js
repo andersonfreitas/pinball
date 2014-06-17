@@ -8,44 +8,38 @@ Particle Physics
 var Particle;
 
 Particle = (function() {
-  var AIR_DENSITY;
-
-  AIR_DENSITY = 1.225;
-
-  function Particle(renderable, mass, radius) {
-    this.renderable = renderable;
+  function Particle(sphere, mass) {
+    this.sphere = sphere;
     this.mass = mass;
-    this.radius = radius;
-    this.renderable;
-    this.mass;
-    this.radius;
+    this.radius = this.sphere.radius;
+    this.A = π * this.radius * this.radius / 10000;
+    this.rho = 1.225;
+    this.Cd = 0.47;
     this.velocity = vec3.create();
     this.forces = vec3.create();
     this.speed = 0;
     this.colliding = false;
     this.impactForces;
-    this.previousPosition;
   }
 
   Particle.prototype.applyForce = function(force) {
-    var drag, fDrag;
+    var Fd, drag, vel_sq2;
     this.forces = vec3.create();
     if (this.colliding) {
       return vec3.add(this.forces, this.forces, this.impactForces);
     } else {
-      vec3.add(this.forces, this.forces, force);
-      drag = vec3.create();
-      vec3.negate(drag, this.velocity);
+      vel_sq2 = vec3.mul(vec3.create(), this.velocity, this.velocity);
+      Fd = 0.5 * this.Cd * this.A * this.rho;
+      drag = vec3.scale(vec3.create(), vel_sq2, Fd);
       vec3.normalize(drag, drag);
-      fDrag = 0.5 * AIR_DENSITY * this.speed * (2 * π) * (this.radius * this.radius) * 0.7;
-      vec3.scale(drag, drag, fDrag);
+      vec3.add(this.forces, this.forces, force);
       return vec3.add(this.forces, this.forces, drag);
     }
   };
 
   Particle.prototype.applyFriction = function(coeff) {};
 
-  Particle.prototype.checkForCollisions = function(dt, particles) {
+  Particle.prototype.checkForCollisions = function(dt, objects, particles) {
     var Fi, direction, distance, impulse, particle, pos, r, relative_velocity, separation, vrn, _i, _len, _results;
     direction = vec3.create();
     relative_velocity = vec3.create();
@@ -54,16 +48,16 @@ Particle = (function() {
     Fi = vec3.create();
     this.colliding = false;
     this.impactForces = vec3.create();
-    if (this.renderable.position[1] <= this.radius) {
+    if (this.sphere.position[1] <= this.radius) {
       direction = vec3.fromValues(0, 1, 0);
       relative_velocity = this.velocity;
       vrn = vec3.dot(relative_velocity, direction);
       if (vrn < 0.0) {
-        impulse = -vrn * (0.60 + 1) / (1 / this.mass);
+        impulse = -vrn * (0.70 + 1) / (1 / this.mass);
         Fi = vec3.clone(direction);
         vec3.scale(Fi, Fi, impulse / dt);
         vec3.add(this.impactForces, this.impactForces, Fi);
-        this.renderable.position[1] = this.radius;
+        this.sphere.position[1] = this.radius;
         this.colliding = true;
       }
     }
@@ -72,7 +66,7 @@ Particle = (function() {
       particle = particles[_i];
       r = this.radius + particle.radius;
       distance = vec3.create();
-      vec3.sub(distance, this.renderable.position, particle.renderable.position);
+      vec3.sub(distance, this.sphere.position, particle.sphere.position);
       separation = vec3.length(distance) - r;
       if (separation <= 0.0) {
         vec3.normalize(distance, distance);
@@ -86,7 +80,7 @@ Particle = (function() {
           vec3.add(this.impactForces, this.impactForces, Fi);
           pos = vec3.create();
           vec3.scale(pos, direction, separation);
-          vec3.sub(this.renderable.position, this.renderable.position, pos);
+          vec3.sub(this.sphere.position, this.sphere.position, pos);
           _results.push(this.colliding = true);
         } else {
           _results.push(void 0);
@@ -112,7 +106,7 @@ Particle = (function() {
     vec3.scale(dv, acceleration, dt);
     vec3.add(this.velocity, this.velocity, dv);
     vec3.scale(ds, this.velocity, dt);
-    vec3.add(this.renderable.position, this.renderable.position, ds);
+    vec3.add(this.sphere.position, this.sphere.position, ds);
     return this.speed = vec3.length(this.velocity);
   };
 

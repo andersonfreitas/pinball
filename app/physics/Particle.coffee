@@ -5,14 +5,13 @@ Particle Physics
 ###
 
 class Particle
-  AIR_DENSITY = 1.225 # kg/m^3 at 15ºC
+  constructor: (@sphere, @mass) ->
+    @radius = @sphere.radius
 
-  constructor: (@renderable, @mass, @radius) ->
-    @renderable
-    @mass
-    @radius
+    @A = π * @radius * @radius / 10000 # m^2
+    @rho = 1.225 # kg/m^3 (air density at 15ºC)
+    @Cd = 0.47 # coefficient of drag
 
-    # @position = vec3.create()
     @velocity = vec3.create()
     @forces = vec3.create()
 
@@ -20,7 +19,6 @@ class Particle
 
     @colliding = false
     @impactForces
-    @previousPosition
 
   # aggregate a force vector
   applyForce: (force) ->
@@ -29,19 +27,20 @@ class Particle
     if @colliding
       vec3.add(@forces, @forces, @impactForces)
     else
-      vec3.add(@forces, @forces, force)
+      vel_sq2 = vec3.mul(vec3.create(), @velocity, @velocity)
 
-      drag = vec3.create()
-      vec3.negate(drag, @velocity)
+      # drag force: Fd = -1/2 * Cd * A * rho * v^2
+      Fd = 0.5 * @Cd * @A * @rho
+
+      drag = vec3.scale(vec3.create(), vel_sq2, Fd)
       vec3.normalize(drag, drag)
 
-      fDrag = 0.5 * AIR_DENSITY * @speed * (2*π) * (@radius * @radius) * 0.7
-      vec3.scale(drag, drag, fDrag)
+      vec3.add(@forces, @forces, force)
       vec3.add(@forces, @forces, drag)
 
   applyFriction: (coeff) ->
 
-  checkForCollisions: (dt, particles)->
+  checkForCollisions: (dt, objects, particles)->
     direction = vec3.create() # n
     relative_velocity = vec3.create()
     vrn = 0.0
@@ -51,26 +50,26 @@ class Particle
 
     @impactForces = vec3.create()
 
-    if @renderable.position[1] <= @radius
-      direction = vec3.fromValues(0, 1, 0)
+    if @sphere.position[1] <= @radius
+      direction = vec3.fromValues(0, 1, 0) # da face
 
       relative_velocity = @velocity
       vrn = vec3.dot(relative_velocity, direction)
 
       if vrn < 0.0
-        impulse = -vrn * (0.60 + 1) / (1 / @mass)
+        impulse = -vrn * (0.70 + 1) / (1 / @mass)
         Fi = vec3.clone(direction)
         vec3.scale(Fi, Fi, impulse/dt)
         vec3.add(@impactForces, @impactForces, Fi)
 
-        @renderable.position[1] = @radius
+        @sphere.position[1] = @radius
         @colliding = true
 
     for particle in particles
       r = @radius + particle.radius
       distance = vec3.create()
       # distance = position - other.position
-      vec3.sub(distance, @renderable.position, particle.renderable.position)
+      vec3.sub(distance, @sphere.position, particle.sphere.position)
 
       separation = vec3.length(distance) - r
 
@@ -88,7 +87,7 @@ class Particle
 
           pos = vec3.create()
           vec3.scale(pos, direction, separation)
-          vec3.sub(@renderable.position, @renderable.position, pos)
+          vec3.sub(@sphere.position, @sphere.position, pos)
 
           @colliding = true
 
@@ -114,7 +113,7 @@ class Particle
     vec3.scale(ds, @velocity, dt)
 
     # position += ds
-    vec3.add(@renderable.position, @renderable.position, ds)
+    vec3.add(@sphere.position, @sphere.position, ds)
 
     # speed = velocity.magnitude
     @speed = vec3.length(@velocity)
