@@ -6,12 +6,24 @@
   this.Paleta = (function(_super) {
     __extends(_Class, _super);
 
-    function _Class() {
-      _Class.__super__.constructor.call(this, 'paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg');
+    _Class.LEFT = 0;
+
+    _Class.RIGHT = 1;
+
+    function _Class(mode) {
+      var name;
+      this.mode = mode;
+      if (this.mode === Paleta.LEFT) {
+        name = 'paleta-esq';
+      } else {
+        name = 'paleta-dir';
+      }
+      _Class.__super__.constructor.call(this, name, name, 'assets/images/madeira.jpg');
       this.animating = false;
     }
 
-    _Class.prototype.animate = function(duration) {
+    _Class.prototype.animate = function(up, duration) {
+      this.up = up;
       this.duration = duration != null ? duration : 1000;
       this.animationTime = 0;
       this.animating = true;
@@ -19,7 +31,7 @@
     };
 
     _Class.prototype.updateAnimation = function(elapsed) {
-      var a, b, delta, rot;
+      var delta, rot;
       this.animationTime += elapsed;
       if (this.animating) {
         delta = this.animationTime / this.duration;
@@ -27,9 +39,21 @@
         if (delta >= 1.0) {
           this.animating = false;
         }
-        a = this.lerp(0, 60, delta);
-        b = this.lerp(60, 0, delta);
-        rot = this.lerp(a, b, delta);
+        if (this.up) {
+          if (this.mode === Paleta.LEFT) {
+            rot = this.lerp(30, 0, delta);
+          }
+          if (this.mode === Paleta.RIGHT) {
+            rot = this.lerp(-30, 0, delta);
+          }
+        } else {
+          if (this.mode === Paleta.LEFT) {
+            rot = this.lerp(0, 30, delta);
+          }
+          if (this.mode === Paleta.RIGHT) {
+            rot = this.lerp(0, -30, delta);
+          }
+        }
         return this.rotation = vec3.fromValues(0, rot, 0);
       }
     };
