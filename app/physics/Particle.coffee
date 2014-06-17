@@ -29,6 +29,7 @@ class Particle
     else
       vel_sq2 = vec3.mul(vec3.create(), @velocity, @velocity)
 
+      # https://en.wikipedia.org/wiki/Drag_equation
       # drag force: Fd = -1/2 * Cd * A * rho * v^2
       Fd = 0.5 * @Cd * @A * @rho
 

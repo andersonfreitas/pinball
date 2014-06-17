@@ -57,6 +57,10 @@ Collision = {
     v = sub(p, sphere.position);
     return dot(v, v) <= sphere.radius * sphere.radius;
   },
+
+  /*
+   * Livro: Real-time collision detection, Christer Ericson, 2005. Elsevier p. 139
+   */
   closestPointTriangle: function(p, a, b, c) {
     var ab, ac, bc, n, sdenom, snom, tdenom, tnom, u, udenom, unom, v, va, vb, vc, w;
     ab = sub(b, a);

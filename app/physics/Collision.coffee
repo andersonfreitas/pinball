@@ -45,6 +45,9 @@ Collision =
 
     return dot(v, v) <= sphere.radius * sphere.radius
 
+  ###
+  # Livro: Real-time collision detection, Christer Ericson, 2005. Elsevier p. 139
+  ###
   closestPointTriangle: (p, a, b, c) ->
     ab = sub(b, a)
     ac = sub(c, a)
