@@ -22,11 +22,15 @@ scaleAndAdd = (vec, scalar) ->
 Collision =
 
   testSphereAgainstFaces: (sphere, faces) ->
-    _.any faces, (face) =>
+    resultingFace = {}
+    any = _.any faces, (face) =>
+      resultingFace = face
       @testSphereFace(sphere, face)
 
+    { collision: any, normal: resultingFace.normal }
+
   testSphereFace: (sphere, face) ->
-    @testSphereTriangle(sphere, face[0], face[1], face[2])
+    @testSphereTriangle(sphere, face.mesh[0], face.mesh[1], face.mesh[2])
 
   testSphereTriangle: (sphere, a, b, c) ->
     # Find point P on triangle ABC closest to sphere center
@@ -37,9 +41,6 @@ Collision =
     v = sub(p, sphere.position)
 
     return dot(v, v) <= sphere.radius * sphere.radius
-
-  closestPointFace: (p, face) ->
-    @closestPointTriangle(p, face[0], face[1], face[2])
 
   closestPointTriangle: (p, a, b, c) ->
     ab = sub(b, a)

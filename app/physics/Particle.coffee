@@ -51,9 +51,11 @@ class Particle
     @impactForces = vec3.create()
 
     for obstacle in staticWorld
-      if Collision.testSphereAgainstFaces(@sphere, obstacle.faces)
+      collidingFace = Collision.testSphereAgainstFaces(@sphere, obstacle.faces)
+      if collidingFace.collision
         # pegar a normal de um vertice e refletir
-        direction = vec3.fromValues(0, 1, 0) # da face
+        direction = collidingFace.normal
+        # vec3.reflect(direction, direction)
 
         relative_velocity = @velocity
         vrn = vec3.dot(relative_velocity, direction)

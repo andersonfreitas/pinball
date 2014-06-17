@@ -40,7 +40,7 @@ Particle = (function() {
   Particle.prototype.applyFriction = function(coeff) {};
 
   Particle.prototype.checkForCollisions = function(dt, staticWorld, particles) {
-    var Fi, direction, distance, impulse, obstacle, particle, pos, r, relative_velocity, separation, vrn, _i, _j, _len, _len1, _results;
+    var Fi, collidingFace, direction, distance, impulse, obstacle, particle, pos, r, relative_velocity, separation, vrn, _i, _j, _len, _len1, _results;
     direction = vec3.create();
     relative_velocity = vec3.create();
     vrn = 0.0;
@@ -50,8 +50,9 @@ Particle = (function() {
     this.impactForces = vec3.create();
     for (_i = 0, _len = staticWorld.length; _i < _len; _i++) {
       obstacle = staticWorld[_i];
-      if (Collision.testSphereAgainstFaces(this.sphere, obstacle.faces)) {
-        direction = vec3.fromValues(0, 1, 0);
+      collidingFace = Collision.testSphereAgainstFaces(this.sphere, obstacle.faces);
+      if (collidingFace.collision) {
+        direction = collidingFace.normal;
         relative_velocity = this.velocity;
         vrn = vec3.dot(relative_velocity, direction);
         if (vrn < 0.0) {

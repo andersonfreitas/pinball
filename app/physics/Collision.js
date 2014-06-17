@@ -31,23 +31,27 @@ scaleAndAdd = function(vec, scalar) {
 
 Collision = {
   testSphereAgainstFaces: function(sphere, faces) {
-    return _.any(faces, (function(_this) {
+    var any, resultingFace;
+    resultingFace = {};
+    any = _.any(faces, (function(_this) {
       return function(face) {
+        resultingFace = face;
         return _this.testSphereFace(sphere, face);
       };
     })(this));
+    return {
+      collision: any,
+      normal: resultingFace.normal
+    };
   },
   testSphereFace: function(sphere, face) {
-    return this.testSphereTriangle(sphere, face[0], face[1], face[2]);
+    return this.testSphereTriangle(sphere, face.mesh[0], face.mesh[1], face.mesh[2]);
   },
   testSphereTriangle: function(sphere, a, b, c) {
     var p, v;
     p = this.closestPointTriangle(sphere.position, a, b, c);
     v = sub(p, sphere.position);
     return dot(v, v) <= sphere.radius * sphere.radius;
-  },
-  closestPointFace: function(p, face) {
-    return this.closestPointTriangle(p, face[0], face[1], face[2]);
   },
   closestPointTriangle: function(p, a, b, c) {
     var ab, ac, bc, n, sdenom, snom, tdenom, tnom, u, udenom, unom, v, va, vb, vc, w;

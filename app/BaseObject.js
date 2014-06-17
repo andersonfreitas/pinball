@@ -145,25 +145,30 @@ BaseObject.prototype.loadModelFromObj = function(data, objName) {
     for (var i = 0; i < objAttributes.indexes.length; i+=3) {
       var index = objAttributes.indexes[i];
 
-      this.faces.push([
-        vec3.fromValues(
-          selected.v[(objAttributes.indexes[i + 0] * 3) + 0],
-          selected.v[(objAttributes.indexes[i + 0] * 3) + 1],
-          selected.v[(objAttributes.indexes[i + 0] * 3) + 2]
-        ),
-
-        vec3.fromValues(
-          selected.v[(objAttributes.indexes[i + 1] * 3) + 0],
-          selected.v[(objAttributes.indexes[i + 1] * 3) + 1],
-          selected.v[(objAttributes.indexes[i + 1] * 3) + 2]
-        ),
-
-        vec3.fromValues(
-          selected.v[(objAttributes.indexes[i + 2] * 3) + 0],
-          selected.v[(objAttributes.indexes[i + 2] * 3) + 1],
-          selected.v[(objAttributes.indexes[i + 2] * 3) + 2]
-        ),
-      ]);
+      this.faces.push({
+          mesh: [
+            vec3.fromValues(
+              selected.v[(objAttributes.indexes[i + 0] * 3) + 0],
+              selected.v[(objAttributes.indexes[i + 0] * 3) + 1],
+              selected.v[(objAttributes.indexes[i + 0] * 3) + 2]
+            ),
+            vec3.fromValues(
+              selected.v[(objAttributes.indexes[i + 1] * 3) + 0],
+              selected.v[(objAttributes.indexes[i + 1] * 3) + 1],
+              selected.v[(objAttributes.indexes[i + 1] * 3) + 2]
+            ),
+            vec3.fromValues(
+              selected.v[(objAttributes.indexes[i + 2] * 3) + 0],
+              selected.v[(objAttributes.indexes[i + 2] * 3) + 1],
+              selected.v[(objAttributes.indexes[i + 2] * 3) + 2]
+            )],
+          normal: vec3.fromValues(
+            selected.n[(objAttributes.indexes[i + 0] * 3) + 0],
+            selected.n[(objAttributes.indexes[i + 0] * 3) + 1],
+            selected.n[(objAttributes.indexes[i + 0] * 3) + 2]
+            )
+        }
+      );
     };
 
     // this.face_normals = [];

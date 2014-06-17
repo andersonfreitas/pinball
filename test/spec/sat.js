@@ -39,6 +39,6 @@ f 3/4/1 1/1/1 4/3/1";
     expect(Collision.testSphereFace(sphere1, face)).toBe(true);
     expect(Collision.testSphereFace(sphere2, face)).toBe(false);
 
-    expect(Collision.testSphereAgainstFaces(sphere1, obj.faces)).toBe(true);
+    expect(Collision.testSphereAgainstFaces(sphere1, obj.faces).collision).toBe(true);
   });
 });
