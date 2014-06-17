@@ -109,7 +109,7 @@ BaseObject.prototype.loadModelFromObj = function(data, objName) {
           if (line[j] in objAttributes.hashIndexes){
             objAttributes.indexes.push(parseInt(objAttributes.hashIndexes[line[j]]));
           }
-          else{
+          else {
             var vtn = line[j].split("/"); // splits the face coordinate, store as v/vt/vn
             /* position vertex */
             objAttributes.v.push(vArr[(parseInt(vtn[0])-1)*3 + 0]);

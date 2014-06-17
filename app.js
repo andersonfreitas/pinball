@@ -53,7 +53,7 @@ var Pinball = (function() {
       lightning: folders.scene.add(properties.scene, 'lightning'),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       zoom: folders.scene.add(properties.scene, 'zoom', 0, 8.0).listen(),
-      physics: folders.scene.add(properties.scene, 'enablePhysics'),
+      physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
     }
   };
 
@@ -168,25 +168,6 @@ var Pinball = (function() {
     var rightUp = false;
     var pressSpace = false;
 
-    window.onkeypress = function(event) {
-      if (event.keyCode == 37) {
-        objects.esfera.position[0] += 0.01;
-      }
-      if (event.keyCode == 38) {
-        objects.esfera.position[2] += 0.01;
-      }
-      if (event.keyCode == 39) {
-        objects.esfera.position[0] -= 0.01;
-      }
-      if (event.keyCode == 40) {
-        objects.esfera.position[2] -= 0.01;
-      }
-      if (event.keyCode == 13) {
-        properties.scene.enablePhysics = !properties.scene.enablePhysics;
-      }
-      console.log(objects.esfera.position)
-    }
-
     window.onkeydown = function(event) {
       if ((event.keyCode == 90) || (event.keyCode == 122)) {
         if (!leftUp) {
@@ -208,6 +189,39 @@ var Pinball = (function() {
           objects.lancador.animate();
           pressSpace = true;
         }
+      }
+
+      if (event.keyCode >= 37 && event.keyCode <= 40) {
+        var any = false;
+        for (_i = 0, _len = staticObjects.length; _i < _len; _i++) {
+          var obstacle = staticObjects[_i];
+          var collidingFace = Collision.testSphereAgainstFaces(objects.esfera, obstacle.faces);
+          if (collidingFace.collision) {
+            any = true;
+            break;
+          }
+        }
+        if (!any) {
+          if (event.keyCode == 37) {
+            objects.esfera.position[0] += 0.01;
+          }
+          if (event.keyCode == 38) {
+            objects.esfera.position[2] += 0.01;
+          }
+          if (event.keyCode == 39) {
+            objects.esfera.position[0] -= 0.01;
+          }
+          if (event.keyCode == 40) {
+            objects.esfera.position[2] -= 0.01;
+          }
+          // console.log(objects.esfera.position)
+        }
+      }
+      if (event.keyCode == 13) {
+        properties.scene.enablePhysics = !properties.scene.enablePhysics;
+      }
+      if (event.keyCode == 82) {
+        objects.esfera.updatePosition(0, 0.016, 0.4)
       }
     };
     window.onkeyup = function(event) {
@@ -297,6 +311,8 @@ var Pinball = (function() {
   var staticObjects = [];
   var objects = {}
 
+  var worldFaces = []
+
   function initScene() {
     function addToScene(object) {
       staticObjects.push(object);
@@ -320,7 +336,7 @@ var Pinball = (function() {
     objects.esfera = new Sphere(0.015)
     sceneGraph.push(objects.esfera);
 
-    objects.esfera.updatePosition(0.25, 0.016, 0.4)
+    objects.esfera.updatePosition(0, 0.016, 0.4)
 
     dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
 
