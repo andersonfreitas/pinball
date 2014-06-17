@@ -40,7 +40,7 @@ class Particle
 
   applyFriction: (coeff) ->
 
-  checkForCollisions: (dt, objects, particles)->
+  checkForCollisions: (dt, staticWorld, particles)->
     direction = vec3.create() # n
     relative_velocity = vec3.create()
     vrn = 0.0
@@ -50,20 +50,23 @@ class Particle
 
     @impactForces = vec3.create()
 
-    if @sphere.position[1] <= @radius
-      direction = vec3.fromValues(0, 1, 0) # da face
+    for obstacle in staticWorld
+      if Collision.testSphereAgainstFaces(@sphere, obstacle.faces)
+        direction = vec3.fromValues(0, 1, 0) # da face
 
-      relative_velocity = @velocity
-      vrn = vec3.dot(relative_velocity, direction)
+        relative_velocity = @velocity
+        vrn = vec3.dot(relative_velocity, direction)
 
-      if vrn < 0.0
-        impulse = -vrn * (0.70 + 1) / (1 / @mass)
-        Fi = vec3.clone(direction)
-        vec3.scale(Fi, Fi, impulse/dt)
-        vec3.add(@impactForces, @impactForces, Fi)
+        if vrn < 0.0
+          impulse = -vrn * (0.7 + 1) / (1 / @mass)
+          Fi = vec3.clone(direction)
+          vec3.scale(Fi, Fi, impulse/dt)
+          vec3.add(@impactForces, @impactForces, Fi)
 
-        @sphere.position[1] = @radius
-        @colliding = true
+          # corrigir a instabilidade
+          # @sphere.position[1] += @radius
+          @colliding = true
+          break
 
     for particle in particles
       r = @radius + particle.radius

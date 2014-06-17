@@ -214,12 +214,8 @@ var Pinball = (function() {
       // obj.applyForce(wind);
       obj.checkForCollisions(1/10, staticObjects, dynamicSpheres);
       obj.applyForce(gravity);
-      obj.applyFriction(0.01);
       obj.update(1/30);
     };
-
-    // if (!Collision.testSphereAgainstFaces(objects.esfera, objects.chao.faces))
-      // objects.esfera.position = vec3.fromValues(0, x-=0.001, 0)
 
     updateAnimationTime();
     render();
@@ -243,6 +239,7 @@ var Pinball = (function() {
 
     objects.chao = new ObjFile('untitled', 'Plane', 'assets/images/ground.jpg')
     addToScene(objects.chao);
+    staticObjects.push(objects.chao);
 
     return sceneGraph;
   }

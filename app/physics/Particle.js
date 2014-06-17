@@ -39,8 +39,8 @@ Particle = (function() {
 
   Particle.prototype.applyFriction = function(coeff) {};
 
-  Particle.prototype.checkForCollisions = function(dt, objects, particles) {
-    var Fi, direction, distance, impulse, particle, pos, r, relative_velocity, separation, vrn, _i, _len, _results;
+  Particle.prototype.checkForCollisions = function(dt, staticWorld, particles) {
+    var Fi, direction, distance, impulse, obstacle, particle, pos, r, relative_velocity, separation, vrn, _i, _j, _len, _len1, _results;
     direction = vec3.create();
     relative_velocity = vec3.create();
     vrn = 0.0;
@@ -48,22 +48,25 @@ Particle = (function() {
     Fi = vec3.create();
     this.colliding = false;
     this.impactForces = vec3.create();
-    if (this.sphere.position[1] <= this.radius) {
-      direction = vec3.fromValues(0, 1, 0);
-      relative_velocity = this.velocity;
-      vrn = vec3.dot(relative_velocity, direction);
-      if (vrn < 0.0) {
-        impulse = -vrn * (0.70 + 1) / (1 / this.mass);
-        Fi = vec3.clone(direction);
-        vec3.scale(Fi, Fi, impulse / dt);
-        vec3.add(this.impactForces, this.impactForces, Fi);
-        this.sphere.position[1] = this.radius;
-        this.colliding = true;
+    for (_i = 0, _len = staticWorld.length; _i < _len; _i++) {
+      obstacle = staticWorld[_i];
+      if (Collision.testSphereAgainstFaces(this.sphere, obstacle.faces)) {
+        direction = vec3.fromValues(0, 1, 0);
+        relative_velocity = this.velocity;
+        vrn = vec3.dot(relative_velocity, direction);
+        if (vrn < 0.0) {
+          impulse = -vrn * (0.7 + 1) / (1 / this.mass);
+          Fi = vec3.clone(direction);
+          vec3.scale(Fi, Fi, impulse / dt);
+          vec3.add(this.impactForces, this.impactForces, Fi);
+          this.colliding = true;
+          break;
+        }
       }
     }
     _results = [];
-    for (_i = 0, _len = particles.length; _i < _len; _i++) {
-      particle = particles[_i];
+    for (_j = 0, _len1 = particles.length; _j < _len1; _j++) {
+      particle = particles[_j];
       r = this.radius + particle.radius;
       distance = vec3.create();
       vec3.sub(distance, this.sphere.position, particle.sphere.position);
