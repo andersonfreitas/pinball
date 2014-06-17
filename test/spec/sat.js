@@ -1,3 +1,5 @@
+// http://jasmine.github.io/1.3/introduction.html
+
 describe('OBJ Loader', function() {
   it('loads an obj with with correct count of faces', function(done) {
    var contents = "o Plane\n\
@@ -28,5 +30,7 @@ f 3/4/1 1/1/1 4/3/1";
     // debugger
     expect(c.testSphereFace(sphere1, face)).toBe(true);
     expect(c.testSphereFace(sphere2, face)).toBe(false);
+
+    expect(c.testSphereAgainstFaces(sphere1, obj.faces)).toBe(true);
   });
 });
