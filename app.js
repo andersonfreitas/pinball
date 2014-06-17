@@ -164,6 +164,7 @@ var Pinball = (function() {
 
     var leftUp = false;
     var rightUp = false;
+    var pressSpace = false;
     window.onkeydown = function(event) {
       if ((event.keyCode == 90) || (event.keyCode == 122)) {
         if (!leftUp) {
@@ -177,6 +178,13 @@ var Pinball = (function() {
           objects.paleta_dir.animate(false, 150);
           objects.paleta_dir2.animate(false, 150);
           rightUp = true;
+        }
+      }
+
+      if (event.keyCode == 32) {
+        if (!pressSpace) {
+          objects.lancador.animate();
+          pressSpace = true;
         }
       }
     };
@@ -193,6 +201,12 @@ var Pinball = (function() {
           objects.paleta_dir.animate(true, 75);
           objects.paleta_dir2.animate(true, 75);
           rightUp = false;
+        }
+      }
+      if (event.keyCode == 32) {
+        if (pressSpace) {
+          objects.lancador.animate(true);
+          pressSpace = false;
         }
       }
     };
@@ -216,7 +230,7 @@ var Pinball = (function() {
   function setupCameraPosition() {
     mat4.identity(mvMatrix);
     zoom = 12 * properties.scene.zoom;
-    eye = vec3.fromValues(0.02323, 0.48135, -0.9366);
+    eye = vec3.fromValues(0.02323, 0.88135, -0.8366);
     at = vec3.fromValues(0.0, 0.0, 0.0);
     up = vec3.fromValues(0, 1, 0);
     mat4.lookAt(mvMatrix, eye, at, up);
@@ -286,7 +300,6 @@ var Pinball = (function() {
     addToScene(new ObjFile('cilindro-1', 'cilindro-1', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('cilindro-2', 'cilindro-2', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('esfera', 'esfera', 'assets/images/madeira.jpg'));
-    addToScene(new ObjFile('lancador', 'lancador', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('mesa-base', 'mesa-base', 'assets/images/madeira-escura.jpg'));
     addToScene(new ObjFile('mesa-lancador', 'mesa-lancador', 'assets/images/madeira.jpg'));
     addToScene(new ObjFile('mesa-obs-1', 'mesa-obs-1', 'assets/images/madeira.jpg'));
@@ -303,6 +316,8 @@ var Pinball = (function() {
     objects.paleta_dir2 = addToScene(new Paleta(Paleta.RIGHT)).updatePosition(-0.24232, 0,0.03706);
     objects.paleta_esq = addToScene(new Paleta(Paleta.LEFT)).updatePosition(0.10353,0,-0.39027);
     objects.paleta_esq2 = addToScene(new Paleta(Paleta.LEFT)).updatePosition(0.23140,0, 0.24691);
+
+    objects.lancador = addToScene(new Lancador());
 
     return sceneGraph;
   }
