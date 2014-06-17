@@ -88,11 +88,14 @@ var Pinball = (function() {
     addToScene(new ObjFile('skyboxGround_circle', 'skyboxGround_Circle', 'assets/images/ground.jpg'));
     addToScene(new ObjFile('skyboxDome_sphere', 'skyboxDome_Sphere', 'assets/images/sky.jpg'));
 
-    var paleta = new ObjFile('paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg');
-    // addToScene(new ObjFile('obs-esq', 'obs-tri-esq_Mesh', 'assets/images/madeira.jpg'));
-    // paleta.updatePosition(0.10022,0.07392,0.38787);
-
+    var paleta = new ObjFile('paleta-esq2', 'paleta-esq_Mesh.010', 'assets/images/madeira.jpg')
+    paleta.updatePosition(0,0,-0.5);
     addToScene(paleta);
+
+
+    addToScene(new ObjFile('mesa-obs1', 'mesa-obs-1_Mesh.008', 'assets/images/madeira.jpg'));
+    addToScene(new ObjFile('mesa-outer', 'mesa-outer_Mesh.003', 'assets/images/madeira.jpg'));
+    addToScene(new ObjFile('bola', 'esfera_mesh', 'assets/images/foiled.jpg').updatePosition(0,0.015,0));
 
     return sceneGraph;
   }
@@ -154,12 +157,10 @@ var Pinball = (function() {
 
       mvPushMatrix();
 
-      var negate = vec3.negate(vec3.create(), obj.position);
-      mat4.translate(mvMatrix, mvMatrix, negate);
+      mat4.translate(mvMatrix, mvMatrix, obj.position);
       mat4.rotateX(mvMatrix, mvMatrix, obj.rotation[0]*π/180);
       mat4.rotateY(mvMatrix, mvMatrix, obj.rotation[1]*π/180);
       mat4.rotateZ(mvMatrix, mvMatrix, obj.rotation[2]*π/180);
-      mat4.translate(mvMatrix, mvMatrix, obj.position);
 
       setMatrixUniforms();
 
@@ -172,7 +173,7 @@ var Pinball = (function() {
   function setupCameraPosition() {
     mat4.identity(mvMatrix);
     zoom = 12 * properties.scene.zoom;
-    eye = vec3.fromValues(0.0, 0.3, zoom);
+    eye = vec3.fromValues(0.02323, 0.48135, -0.9366);
     at = vec3.fromValues(0.0, 0.0, 0.0);
     up = vec3.fromValues(0, 1, 0);
     mat4.lookAt(mvMatrix, eye, at, up);
