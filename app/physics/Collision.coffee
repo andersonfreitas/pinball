@@ -1,21 +1,19 @@
-class Sphere
-  constructor: ->
-    @radius
-    @position
+@Sphere = class
+  constructor: (@radius, @position)->
 
-sub: (a, b) ->
+sub = (a, b) ->
   vec3.sub(vec3.create(), a, b)
 
-mul: (a, b) ->
+mul = (a, b) ->
   vec3.mul(vec3.create(), a, b)
 
-dot: (a, b) ->
+dot = (a, b) ->
   vec3.dot(vec3.create(), a, b)
 
-cross: (a, b) ->
+cross = (a, b) ->
   vec3.cross(vec3.create(), a, b)
 
-scale: (a, scalar) ->
+scale = (a, scalar) ->
   vec3.scale(vec3.create(), a, scalar)
 
 @Collision = class
