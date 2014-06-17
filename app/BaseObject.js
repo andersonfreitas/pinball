@@ -7,12 +7,7 @@ function BaseObject() {
   this.textureBuffer = 0;
   this.indexBuffer = 0;
 
-  this.normalsBase = [];
-  this.verticesBase = [];
-  this.colorsBase = [];
-
   this.vertices = [];
-  this.colors = [];
   this.normals = [];
   this.indices = [];
   this.textureCoords = [];
@@ -139,13 +134,39 @@ BaseObject.prototype.loadModelFromObj = function(data, objName) {
     }
   }
   objectsMap[lastObjName] = objAttributes; // adds the last object in the file
-  // return objectsMap;
 
   if ((selected = objectsMap[objName]) !== undefined) {
     this.indices = selected.indexes;
     this.vertices = selected.v;
     this.normals = selected.n;
     this.textureCoords = selected.t;
+
+    this.faces = [];
+    for (var i = 0; i < objAttributes.indexes.length; i+=3) {
+      var index = objAttributes.indexes[i];
+
+      this.faces.push([
+        vec3.fromValues(
+          selected.v[(objAttributes.indexes[i + 0] * 3) + 0],
+          selected.v[(objAttributes.indexes[i + 0] * 3) + 1],
+          selected.v[(objAttributes.indexes[i + 0] * 3) + 2]
+        ),
+
+        vec3.fromValues(
+          selected.v[(objAttributes.indexes[i + 1] * 3) + 0],
+          selected.v[(objAttributes.indexes[i + 1] * 3) + 1],
+          selected.v[(objAttributes.indexes[i + 1] * 3) + 2]
+        ),
+
+        vec3.fromValues(
+          selected.v[(objAttributes.indexes[i + 2] * 3) + 0],
+          selected.v[(objAttributes.indexes[i + 2] * 3) + 1],
+          selected.v[(objAttributes.indexes[i + 2] * 3) + 2]
+        ),
+      ]);
+    };
+
+    // this.face_normals = [];
   }
 };
 
