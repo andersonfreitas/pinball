@@ -200,8 +200,6 @@ var Pinball = (function() {
     lastTime = timeNow;
   }
 
-  var x = 0.4;
-
   function animate() {
     requestAnimationFrame(animate);
     stats.begin();
