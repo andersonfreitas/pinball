@@ -1,7 +1,6 @@
 # Blender v2.70 (sub 0) OBJ File: 'skybox.blend'
 # www.blender.org
-mtllib skybox_circle.mtl
-o skyboxGround_Circle
+o ground
 v 0.000000 0.000000 -1.000000
 v -0.195090 0.000000 -0.980785
 v -0.382683 0.000000 -0.923880
@@ -157,7 +156,6 @@ vt 0.019311 0.354184
 vt 0.980686 0.645816
 vt 0.181330 0.888297
 vn 0.000000 1.000000 0.000000
-usemtl Material.001
 s off
 f 29/1/1 33/2/1 27/3/1
 f 33/2/1 42/4/1 26/5/1

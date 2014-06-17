@@ -1,6 +1,6 @@
 # Blender v2.70 (sub 0) OBJ File: 'skybox.blend'
 # www.blender.org
-o esfera_mesh
+o esfera
 v 0.000000 0.015050 0.000000
 v -0.010890 0.006730 -0.007912
 v 0.004160 0.006730 -0.012802
