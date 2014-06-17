@@ -1,6 +1,3 @@
-@Sphere = class
-  constructor: (@radius, @position)->
-
 add = (a, b) ->
   vec3.add(vec3.create(), a, b)
 
@@ -22,7 +19,11 @@ scale = (a, scalar) ->
 scaleAndAdd = (vec, scalar) ->
   vec3.scaleAndAdd(vec3.create(), vec, vec3.fromValues(1,1,1), scalar)
 
-@Collision = class
+Collision =
+
+  testSphereAgainstFaces: (sphere, faces) ->
+    _.any faces, (face) =>
+      @testSphereFace(sphere, face)
 
   testSphereFace: (sphere, face) ->
     @testSphereTriangle(sphere, face[0], face[1], face[2])
