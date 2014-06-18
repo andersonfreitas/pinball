@@ -47,6 +47,9 @@ var Pinball = (function() {
       integration: 'RK4',
       shadows: false,
       lighting: true,
+      lightPosX: 0,
+      lightPosY: 1,
+      lightPosZ: 0,
       diffuseLight: '#fff',
       enablePhysics: true,
       audio: true,
@@ -72,6 +75,11 @@ var Pinball = (function() {
     scene: {
       audio: folders.scene.add(properties.scene, 'audio'),
       lighting: folders.scene.add(properties.scene, 'lighting'),
+
+      lightPosX: folders.scene.add(properties.scene, 'lightPosX', -1, 1),
+      lightPosY: folders.scene.add(properties.scene, 'lightPosY', -1, 1),
+      lightPosZ: folders.scene.add(properties.scene, 'lightPosZ', -1, 1),
+
       integration: folders.scene.add(properties.scene, 'integration', [ 'Euler', 'Verlet', 'RK4']),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
@@ -87,6 +95,21 @@ var Pinball = (function() {
   controllers.scene.diffuseLight.onChange(function(value) {
     var color = Utils.hexToRgb(value);
     gl.uniform3f(currentProgram.u_DiffuseLight, color.r, color.g, color.b);
+  });
+
+  controllers.scene.lightPosX.onChange(function(value) {
+    var lightPos = vec3.fromValues(properties.scene.lightPosX, properties.scene.lightPosY, properties.scene.lightPosZ);
+    gl.uniform3fv(currentProgram.u_LightPos, _.flatten(lightPos));
+  });
+
+  controllers.scene.lightPosY.onChange(function(value) {
+    var lightPos = vec3.fromValues(properties.scene.lightPosX, properties.scene.lightPosY, properties.scene.lightPosZ);
+    gl.uniform3fv(currentProgram.u_LightPos, _.flatten(lightPos));
+  });
+
+  controllers.scene.lightPosZ.onChange(function(value) {
+    var lightPos = vec3.fromValues(properties.scene.lightPosX, properties.scene.lightPosY, properties.scene.lightPosZ);
+    gl.uniform3fv(currentProgram.u_LightPos, _.flatten(lightPos));
   });
 
   function initShaderVars() {
@@ -105,17 +128,13 @@ var Pinball = (function() {
 
     gl.useProgram(currentProgram);
     currentProgram.u_DiffuseLight = gl.getUniformLocation(currentProgram, 'u_DiffuseLight');
-    currentProgram.u_LightDirection = gl.getUniformLocation(currentProgram, 'u_LightDirection');
-    currentProgram.u_AmbientLight = gl.getUniformLocation(currentProgram, 'u_AmbientLight');
+    currentProgram.u_LightPos = gl.getUniformLocation(currentProgram, 'u_LightPos');
 
     var color = Utils.hexToRgb(properties.scene.diffuseLight);
     gl.uniform3f(currentProgram.u_DiffuseLight, color.r, color.g, color.b);
 
-    var lightDirection = vec3.fromValues(5, 5, 5);
-    vec3.normalize(lightDirection, lightDirection);
-    gl.uniform3fv(currentProgram.u_LightDirection, _.flatten(lightDirection));
-
-    gl.uniform3f(currentProgram.u_AmbientLight, 0.2, 0.2, 0.2);
+    var lightPos = vec3.fromValues(0, 1, 0);
+    gl.uniform3fv(currentProgram.u_LightPos, _.flatten(lightPos));
   }
 
   function initStats() {
