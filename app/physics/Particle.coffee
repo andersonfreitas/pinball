@@ -104,13 +104,6 @@ class Particle
 
           @colliding = true
 
-  ###
-  dt = time step
-  ###
-  update: (dt) ->
-    # @updateEuler(dt)
-    @updateVerlet(dt)
-
   updateEuler: (dt) ->
     acceleration = vec3.create()
     dv = vec3.create()
@@ -147,5 +140,54 @@ class Particle
     @acceleration = scale(add(last_acceleration, new_acceleration), 0.5)
 
     @velocity = add(@velocity, scale(@acceleration, dt))
+
+  current_force: (position, velocity) ->
+    forces = vec3.create()
+
+    if @colliding
+      vec3.add(forces, forces, @impactForces)
+
+    vel_sq2 = vec3.mul(vec3.create(), velocity, velocity)
+
+    # https://en.wikipedia.org/wiki/Drag_equation
+    # drag force: Fd = -1/2 * Cd * A * rho * v^2
+    Fd = 0.5 * @Cd * @A * @rho
+
+    drag = scale(vel_sq2, Fd)
+    vec3.normalize(drag, drag)
+
+    gravity = vec3.fromValues(0, 0, -9.81) # m^s
+
+    forces = add(forces, gravity)
+    forces = add(forces, drag)
+
+    forces = scale(forces, 1/@mass)
+    forces
+
+  updateRK4: (dt) ->
+    pos = @sphere.position
+
+    @acceleration = @current_force(pos, @velocity)
+    # 1st
+    xk1 = scale(@velocity, dt)
+    vk1 = scale(@acceleration, dt)
+
+    # 2nd
+    midVelocity = add(@velocity, scale(vk1, 0.5))
+    xk2 = scale(midVelocity, dt)
+    vk2 = scale(scale(@current_force(add(pos, scale(xk1, 0.5)), midVelocity), 1/@mass), dt)
+
+    # 3rd
+    midVelocity = add(@velocity, scale(vk2, 0.5))
+    xk3 = scale(midVelocity, dt)
+    vk3 = scale(scale(@current_force(add(pos, scale(xk2, 0.5)), midVelocity), 1/@mass), dt)
+
+    # 4th
+    midVelocity = add(@velocity, vk3)
+    xk4 = scale(midVelocity, dt)
+    vk4 = scale(scale(@current_force(add(pos, xk3), midVelocity), 1/@mass), dt)
+
+    @sphere.position = add(@sphere.position, scale(add(add(xk1, scale(xk2, 2.0)), add(xk4, scale(xk3, 2.0))), 1/6))
+    @velocity = add(@velocity, scale(add(add(vk1, scale(vk2, 2.0)), add(vk4, scale(vk3, 2.0))), 1/6))
 
 window.RigidBody = Particle

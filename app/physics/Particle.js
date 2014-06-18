@@ -105,15 +105,6 @@ Particle = (function() {
     return _results;
   };
 
-
-  /*
-  dt = time step
-   */
-
-  Particle.prototype.update = function(dt) {
-    return this.updateVerlet(dt);
-  };
-
   Particle.prototype.updateEuler = function(dt) {
     var acceleration, ds, dv;
     acceleration = vec3.create();
@@ -135,6 +126,42 @@ Particle = (function() {
     new_acceleration = scale(this.forces, 1 / this.mass);
     this.acceleration = scale(add(last_acceleration, new_acceleration), 0.5);
     return this.velocity = add(this.velocity, scale(this.acceleration, dt));
+  };
+
+  Particle.prototype.current_force = function(position, velocity) {
+    var Fd, drag, forces, gravity, vel_sq2;
+    forces = vec3.create();
+    if (this.colliding) {
+      vec3.add(forces, forces, this.impactForces);
+    }
+    vel_sq2 = vec3.mul(vec3.create(), velocity, velocity);
+    Fd = 0.5 * this.Cd * this.A * this.rho;
+    drag = scale(vel_sq2, Fd);
+    vec3.normalize(drag, drag);
+    gravity = vec3.fromValues(0, 0, -9.81);
+    forces = add(forces, gravity);
+    forces = add(forces, drag);
+    forces = scale(forces, 1 / this.mass);
+    return forces;
+  };
+
+  Particle.prototype.updateRK4 = function(dt) {
+    var midVelocity, pos, vk1, vk2, vk3, vk4, xk1, xk2, xk3, xk4;
+    pos = this.sphere.position;
+    this.acceleration = this.current_force(pos, this.velocity);
+    xk1 = scale(this.velocity, dt);
+    vk1 = scale(this.acceleration, dt);
+    midVelocity = add(this.velocity, scale(vk1, 0.5));
+    xk2 = scale(midVelocity, dt);
+    vk2 = scale(scale(this.current_force(add(pos, scale(xk1, 0.5)), midVelocity), 1 / this.mass), dt);
+    midVelocity = add(this.velocity, scale(vk2, 0.5));
+    xk3 = scale(midVelocity, dt);
+    vk3 = scale(scale(this.current_force(add(pos, scale(xk2, 0.5)), midVelocity), 1 / this.mass), dt);
+    midVelocity = add(this.velocity, vk3);
+    xk4 = scale(midVelocity, dt);
+    vk4 = scale(scale(this.current_force(add(pos, xk3), midVelocity), 1 / this.mass), dt);
+    this.sphere.position = add(this.sphere.position, scale(add(add(xk1, scale(xk2, 2.0)), add(xk4, scale(xk3, 2.0))), 1 / 6));
+    return this.velocity = add(this.velocity, scale(add(add(vk1, scale(vk2, 2.0)), add(vk4, scale(vk3, 2.0))), 1 / 6));
   };
 
   return Particle;
