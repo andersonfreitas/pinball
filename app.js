@@ -34,6 +34,7 @@ var Pinball = (function() {
 
   var properties = {
     scene: {
+      integration: 'RK4',
       shadows: false,
       wireframe: false,
       lightning: true,
@@ -51,6 +52,7 @@ var Pinball = (function() {
     scene: {
       wireframe: folders.scene.add(properties.scene, 'wireframe'),
       lightning: folders.scene.add(properties.scene, 'lightning'),
+      integration: folders.scene.add(properties.scene, 'integration', [ 'Euler', 'Verlet', 'RK4']),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       zoom: folders.scene.add(properties.scene, 'zoom', 0, 8.0).listen(),
       physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
@@ -159,7 +161,7 @@ var Pinball = (function() {
     setupCameraPosition();
     // updateProjection();
 
-    // folders.scene.open();
+    folders.scene.open();
 
     onWindowResize();
     window.addEventListener('resize', _.debounce(onWindowResize, 300, false), false);
@@ -221,7 +223,7 @@ var Pinball = (function() {
         properties.scene.enablePhysics = !properties.scene.enablePhysics;
       }
       if (event.keyCode == 82) {
-        objects.esfera.updatePosition(0, 0.016, 0.4)
+        objects.esfera.updatePosition(-0.1, 0.016, 0.4)
         dynamicSpheres[0].velocity = vec3.create()
         dynamicSpheres[0].acceleration = vec3.create()
       }
@@ -297,9 +299,19 @@ var Pinball = (function() {
       for (var i = 0; i < dynamicSpheres.length; i++) {
         var obj = dynamicSpheres[i];
 
-        obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
-        obj.applyForce(gravity);
-        obj.update(1/30);
+        var integration = properties.scene.integration;
+        if (integration == 'RK4') {
+          obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
+          obj.updateRK4(1/30);
+        } else if (integration == 'Verlet') {
+          obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
+          obj.applyForce(gravity);
+          obj.updateVerlet(1/30);
+        } else if (integration == 'Euler') {
+          obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
+          obj.applyForce(gravity);
+          obj.updateEuler(1/30);
+        }
       };
     }
     updateAnimationTime();
@@ -325,7 +337,7 @@ var Pinball = (function() {
     objects.esfera = new Sphere(0.015)
     sceneGraph.push(objects.esfera);
 
-    objects.esfera.updatePosition(0, 0.016, 0.4)
+    objects.esfera.updatePosition(-0.1, 0.016, 0.4)
 
     dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
 
