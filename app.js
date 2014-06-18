@@ -223,9 +223,7 @@ var Pinball = (function() {
         properties.scene.enablePhysics = !properties.scene.enablePhysics;
       }
       if (event.keyCode == 82) {
-        objects.esfera.updatePosition(-0.1, 0.016, 0.4)
-        dynamicSpheres[0].velocity = vec3.create()
-        dynamicSpheres[0].acceleration = vec3.create()
+        objects.esfera.reset()
       }
     };
     window.onkeyup = function(event) {
@@ -314,6 +312,12 @@ var Pinball = (function() {
         }
       };
     }
+
+    if (objects.esfera.position[2] < -0.5853) {
+      audio.effects.death.play()
+      objects.esfera.reset();
+    }
+
     updateAnimationTime();
     render();
 
@@ -339,9 +343,17 @@ var Pinball = (function() {
     objects.esfera = new Sphere(0.015)
     sceneGraph.push(objects.esfera);
 
-    objects.esfera.updatePosition(-0.1, 0.016, 0.4)
-
     dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
+
+    objects.esfera.reset = function() {
+      // [-0.38064073512970287, 0.016, -0.28420371626757474]
+      objects.esfera.updatePosition(-0.1, 0.016, 0.4);
+
+      dynamicSpheres[0].velocity = vec3.fromValues(0, 0, 1);
+      dynamicSpheres[0].acceleration = vec3.create();
+    }
+
+    objects.esfera.reset();
 
     sceneGraph.push(new ObjFile('ground', 'ground', 'assets/images/ground.jpg'));
     sceneGraph.push(new ObjFile('dome', 'dome', 'assets/images/sky.jpg'));
