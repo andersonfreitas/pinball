@@ -40,3 +40,12 @@
     https://github.com/hughsk/dot-obj
     https://github.com/gl-modules/gl-now
     http://www.mathematik.uni-marburg.de/~thormae/lectures/graphics1/code/WebGLShaderLightMat/ShaderLightMat.html
+
+    http://burakkanber.com/blog/modeling-physics-javascript-gravity-and-drag/
+    http://buildnewgames.com/gamephysics/
+    http://www.euclideanspace.com/threed/games/examples/snooker/rolling/index.htm
+    http://buildnewgames.com/broad-phase-collision-detection/
+    https://mollyrocket.com/849
+    https://en.wikipedia.org/wiki/Gilbert%E2%80%93Johnson%E2%80%93Keerthi_distance_algorithm
+    http://gafferongames.com/game-physics/integration-basics/
+
