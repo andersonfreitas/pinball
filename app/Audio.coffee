@@ -10,3 +10,7 @@
     @effects[name] = document.createElement('audio')
     @effects[name].setAttribute 'src', "assets/audio/#{name}.wav"
     @effects[name].setAttribute 'preload', 'auto'
+
+    @effects[name].sing = =>
+      if Pinball.properties.scene.audio
+        @effects[name].play()

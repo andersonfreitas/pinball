@@ -41,6 +41,7 @@ var Pinball = (function() {
       zoom: 0.1,
       diffuseLight: '#ccc',
       enablePhysics: true,
+      audio: true,
       reset: function() { objects.esfera.reset(); }
     }
   };
@@ -51,6 +52,7 @@ var Pinball = (function() {
 
   var controllers = {
     scene: {
+      audio: folders.scene.add(properties.scene, 'audio'),
       wireframe: folders.scene.add(properties.scene, 'wireframe'),
       lightning: folders.scene.add(properties.scene, 'lightning'),
       integration: folders.scene.add(properties.scene, 'integration', [ 'Euler', 'Verlet', 'RK4']),
@@ -234,7 +236,7 @@ var Pinball = (function() {
           objects.paleta_esq.animate(true, 75);
           objects.paleta_esq2.animate(true, 75);
           leftUp = false;
-          audio.effects.flipper.play();
+          audio.effects.flipper.sing();
         }
       }
       if ((event.keyCode == 88) || (event.keyCode == 120) && !event.repeat) {
@@ -242,7 +244,7 @@ var Pinball = (function() {
           objects.paleta_dir.animate(true, 75);
           objects.paleta_dir2.animate(true, 75);
           rightUp = false;
-          audio.effects.flipper.play();
+          audio.effects.flipper.sing();
         }
       }
       if (event.keyCode == 32) {
@@ -252,7 +254,7 @@ var Pinball = (function() {
 
           if (paused) {
             paused = false;
-            audio.effects.start.play();
+            audio.effects.start.sing();
           }
         }
       }
@@ -325,7 +327,7 @@ var Pinball = (function() {
     }
 
     if (objects.esfera.position[2] < -0.5853) {
-      audio.effects.death.play()
+      audio.effects.death.sing()
       objects.esfera.reset();
     }
 

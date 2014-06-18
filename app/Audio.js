@@ -11,7 +11,14 @@ this.Audio = (function() {
   _Class.prototype.loadEffect = function(name) {
     this.effects[name] = document.createElement('audio');
     this.effects[name].setAttribute('src', "assets/audio/" + name + ".wav");
-    return this.effects[name].setAttribute('preload', 'auto');
+    this.effects[name].setAttribute('preload', 'auto');
+    return this.effects[name].sing = (function(_this) {
+      return function() {
+        if (Pinball.properties.scene.audio) {
+          return _this.effects[name].play();
+        }
+      };
+    })(this);
   };
 
   return _Class;
