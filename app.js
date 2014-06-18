@@ -47,8 +47,7 @@ var Pinball = (function() {
       integration: 'RK4',
       shadows: false,
       lighting: true,
-      zoom: 0.1,
-      diffuseLight: '#ccc',
+      diffuseLight: '#fff',
       enablePhysics: true,
       audio: true,
       reset: function() { objects.esfera.reset(); }
@@ -65,7 +64,6 @@ var Pinball = (function() {
       lighting: folders.scene.add(properties.scene, 'lighting'),
       integration: folders.scene.add(properties.scene, 'integration', [ 'Euler', 'Verlet', 'RK4']),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
-      zoom: folders.scene.add(properties.scene, 'zoom', 0, 8.0).listen(),
       physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
       reset: folders.scene.add(properties.scene, 'reset'),
     }
@@ -99,7 +97,7 @@ var Pinball = (function() {
     currentProgram.u_LightDirection = gl.getUniformLocation(currentProgram, 'u_LightDirection');
     currentProgram.u_AmbientLight = gl.getUniformLocation(currentProgram, 'u_AmbientLight');
 
-    var color = Utils.hexToRgb('#ccc');
+    var color = Utils.hexToRgb(properties.scene.diffuseLight);
     gl.uniform3f(currentProgram.u_DiffuseLight, color.r, color.g, color.b);
 
     var lightDirection = vec3.fromValues(5, 5, 5);
@@ -286,7 +284,6 @@ var Pinball = (function() {
 
   function setupCameraPosition() {
     mat4.identity(mvMatrix);
-    zoom = 12 * properties.scene.zoom;
     eye = vec3.fromValues(0.02323, 0.88135, -0.8366);
     at = vec3.fromValues(0.0, 0.0, 0.0);
     up = vec3.fromValues(0, 1, 0);
