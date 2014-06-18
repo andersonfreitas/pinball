@@ -223,6 +223,7 @@ var Pinball = (function() {
       if (event.keyCode == 82) {
         objects.esfera.updatePosition(0, 0.016, 0.4)
         dynamicSpheres[0].velocity = vec3.create()
+        dynamicSpheres[0].acceleration = vec3.create()
       }
     };
     window.onkeyup = function(event) {
@@ -296,7 +297,7 @@ var Pinball = (function() {
       for (var i = 0; i < dynamicSpheres.length; i++) {
         var obj = dynamicSpheres[i];
 
-        obj.checkForCollisions(1/10, staticObjects, dynamicSpheres);
+        obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
         obj.applyForce(gravity);
         obj.update(1/30);
       };

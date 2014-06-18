@@ -20,6 +20,7 @@ Particle = (function() {
     this.speed = 0;
     this.colliding = false;
     this.impactForces;
+    this.acceleration = vec3.create();
   }
 
   Particle.prototype.applyForce = function(force) {
@@ -110,6 +111,10 @@ Particle = (function() {
    */
 
   Particle.prototype.update = function(dt) {
+    return this.updateVerlet(dt);
+  };
+
+  Particle.prototype.updateEuler = function(dt) {
     var acceleration, ds, dv;
     acceleration = vec3.create();
     dv = vec3.create();
@@ -120,6 +125,16 @@ Particle = (function() {
     vec3.scale(ds, this.velocity, dt);
     vec3.add(this.sphere.position, this.sphere.position, ds);
     return this.speed = vec3.length(this.velocity);
+  };
+
+  Particle.prototype.updateVerlet = function(dt) {
+    var last_acceleration, new_acceleration, new_pos;
+    last_acceleration = this.acceleration;
+    new_pos = add(scale(this.velocity, dt), scale(last_acceleration, dt * dt * 0.5));
+    vec3.add(this.sphere.position, this.sphere.position, new_pos);
+    new_acceleration = scale(this.forces, 1 / this.mass);
+    this.acceleration = scale(add(last_acceleration, new_acceleration), 0.5);
+    return this.velocity = add(this.velocity, scale(this.acceleration, dt));
   };
 
   return Particle;
