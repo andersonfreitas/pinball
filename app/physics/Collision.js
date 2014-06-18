@@ -55,7 +55,7 @@ Collision = {
     var p, v;
     p = this.closestPointTriangle(sphere.position, a, b, c);
     v = sub(p, sphere.position);
-    return dot(v, v) <= sphere.radius * sphere.radius;
+    return dot(v, v) <= (sphere.radius * sphere.radius * 1.2);
   },
 
   /*

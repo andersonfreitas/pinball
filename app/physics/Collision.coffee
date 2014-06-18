@@ -43,7 +43,7 @@ Collision =
     # center to point p is less than the (squared) sphere radius
     v = sub(p, sphere.position)
 
-    return dot(v, v) <= sphere.radius * sphere.radius
+    return dot(v, v) <= (sphere.radius * sphere.radius * 1.2)
 
   ###
   # Livro: Real-time collision detection, Christer Ericson, 2005. Elsevier p. 139
