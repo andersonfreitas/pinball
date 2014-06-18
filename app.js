@@ -40,7 +40,7 @@ var Pinball = (function() {
       lightning: true,
       zoom: 0.1,
       diffuseLight: '#ccc',
-      enablePhysics: false,
+      enablePhysics: true,
       reset: function() { objects.esfera.reset(); }
     }
   };
@@ -234,6 +234,7 @@ var Pinball = (function() {
           objects.paleta_esq.animate(true, 75);
           objects.paleta_esq2.animate(true, 75);
           leftUp = false;
+          audio.effects.flipper.play();
         }
       }
       if ((event.keyCode == 88) || (event.keyCode == 120) && !event.repeat) {
@@ -241,12 +242,18 @@ var Pinball = (function() {
           objects.paleta_dir.animate(true, 75);
           objects.paleta_dir2.animate(true, 75);
           rightUp = false;
+          audio.effects.flipper.play();
         }
       }
       if (event.keyCode == 32) {
         if (pressSpace) {
           objects.lancador.animate(true);
           pressSpace = false;
+
+          if (paused) {
+            paused = false;
+            audio.effects.start.play();
+          }
         }
       }
     };
@@ -289,11 +296,13 @@ var Pinball = (function() {
     lastTime = timeNow;
   }
 
+  var paused = true;
+
   function animate() {
     requestAnimationFrame(animate);
     stats.begin();
 
-    if (properties.scene.enablePhysics) {
+    if (properties.scene.enablePhysics && !paused) {
       var gravity = vec3.fromValues(0, 0, -9.81 /* m^s */);
 
       for (var i = 0; i < dynamicSpheres.length; i++) {
@@ -352,6 +361,7 @@ var Pinball = (function() {
 
       dynamicSpheres[0].velocity = vec3.fromValues(0, 0, 3);
       dynamicSpheres[0].acceleration = vec3.create();
+      paused = true;
     }
 
     objects.esfera.reset();
