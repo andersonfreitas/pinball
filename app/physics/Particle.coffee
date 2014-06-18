@@ -76,7 +76,7 @@ class Particle
           # corrigir a instabilidade
           # @sphere.position[1] += @radius
           @colliding = true
-          audio.effects.chomp.play()
+          audio.effects.chomp.sing()
           addScore()
           break
 

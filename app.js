@@ -50,7 +50,17 @@ var Pinball = (function() {
       diffuseLight: '#fff',
       enablePhysics: true,
       audio: true,
-      reset: function() { objects.esfera.reset(); }
+      reset: function() { objects.esfera.reset(); },
+      stress: function() {
+        var esfera = new Sphere(0.015)
+        esfera.updatePosition(-0.380640, 0.016, -0.284203);
+        sceneGraph.push(esfera);
+
+        rb = new RigidBody(esfera, 5.0);
+        rb.velocity = vec3.fromValues(0, 0, 3);
+        rb.acceleration = vec3.create();
+        dynamicSpheres.push(rb);
+      }
     }
   };
 
@@ -66,6 +76,7 @@ var Pinball = (function() {
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
       reset: folders.scene.add(properties.scene, 'reset'),
+      stress: folders.scene.add(properties.scene, 'stress'),
     }
   };
 
