@@ -12,12 +12,22 @@
 
     <canvas></canvas>
 
+   <div id="info">
+       <div id='score'>0</div>
+       <div id='lives'>3</div>
+   </div>
+
+   <div id="gameover">
+    GAME OVER!!
+   </div>
+
     <script type="text/javascript" src="vendor/requestAnimationFrame.js"></script>
     <script type="text/javascript" src="vendor/gl-matrix-min.js"></script>
     <script type="text/javascript" src="vendor/underscore-min.js"></script>
     <script type="text/javascript" src="vendor/dat.gui.min.js"></script>
     <script type="text/javascript" src="vendor/stats.min.js"></script>
     <script type="text/javascript" src="vendor/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="vendor/jquery.popupoverlay.js"></script>
 
     <script type="text/javascript" src="app/utils.js"></script>
     <script type="text/javascript" src="app/webgl.js"></script>
@@ -34,5 +44,7 @@
     <script type="text/javascript" src="app/physics/Collision.js"></script>
 
     <script type="text/javascript" src="app.js"></script>
+
+
   </body>
 </html>

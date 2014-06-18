@@ -2,4 +2,27 @@ body {
   background-color: #000000;
   margin: 0px;
   overflow: hidden;
+  font-family: Verdana, sans-serif;
+
+}
+
+#info {
+  position: absolute;
+  bottom: 0px;
+  width: 200px;
+  height: 100px;
+  overflow: hidden;
+  margin: 3px 3px 3px 3px;
+
+  color:#303030;
+  text-align: center;
+}
+
+#score {
+  font-size: 2em;
+}
+
+#gameover {
+ font-size: 6em;
+ color: #F27572;
 }

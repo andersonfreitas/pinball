@@ -1,3 +1,13 @@
+
+score = 0;
+vidas = 3;
+function addScore() {
+  $("#score").text(score+=10);
+}
+function diminuiVidas() {
+ $("#lives").text(--vidas);
+}
+
 var Pinball = (function() {
 
   var gui = new dat.GUI({ autoPlace: true });
@@ -327,6 +337,13 @@ var Pinball = (function() {
     if (objects.esfera.position[2] < -0.5853) {
       audio.effects.death.sing()
       objects.esfera.reset();
+      diminuiVidas();
+
+      if (vidas == 0) {
+        $('#gameover').popup();
+        $('#gameover').popup('show');
+      }
+
     }
 
     updateAnimationTime();

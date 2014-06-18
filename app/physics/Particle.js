@@ -71,6 +71,7 @@ Particle = (function() {
           vec3.add(this.impactForces, this.impactForces, Fi);
           this.colliding = true;
           audio.effects.chomp.play();
+          addScore();
           break;
         }
       }

@@ -77,6 +77,7 @@ class Particle
           # @sphere.position[1] += @radius
           @colliding = true
           audio.effects.chomp.play()
+          addScore()
           break
 
     for particle in particles
