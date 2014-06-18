@@ -7,16 +7,16 @@ varying vec2 vTextureCoord;
 uniform bool enableLight;
 uniform sampler2D uSampler;
 
-const vec3 lightPos = vec3(1.0,1.0,1.0);
 const vec3 ambientColor = vec3(0.1, 0.0, 0.0);
 uniform vec3 u_DiffuseLight;
+uniform vec3 u_LightPos;
 
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 void main() {
 
   vec3 normal = normalize(normalInterp);
-  vec3 lightDir = normalize(lightPos - vertPos);
+  vec3 lightDir = normalize(u_LightPos - vertPos);
 
   float lambertian = max(dot(lightDir,normal), 0.0);
   float specular = 0.0;
