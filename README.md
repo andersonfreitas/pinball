@@ -18,7 +18,7 @@ Use as teclas `z` e `x` para comandar as paletas e `espaço` para disparar as es
 
 As teclas de direção do teclado podem ser usados para "cheat", pois como as vezes a esfera pode ficar travada devido ao problema de colisão, ela pode ser movimentada através desse artifício.
 
-Os botões da interface permitem ajustar diversos controles, como até a escolha do integrador usado.
+Os botões da interface permitem ajustar diversos controles, como pausar e até a escolha do integrador usado.
 
 ### Colisão e Física
 
@@ -30,7 +30,7 @@ Depois da colisão detectada com a face, a reação da colisão é calculada olh
 
 As principais forças consideradas são a gravidade e o arrasto criado pela densidade do ar (calculado na temperatura de 15º e influenciado pela área da esfera), e ao colidir parte é absorvida pela parede com um coeficiente de restituição usado.
 
-A integração numérica pode ser escolhida entre Euler, Verlet e Runge-Kutta de 4ª ordem, diferentes abordagens foram testadas pois o método de Euler se demonstrou muito instável.
+A integração numérica pode ser escolhida entre Euler, Verlet e Runge-Kutta de 4ª ordem, diferentes abordagens foram testadas pois o método de Euler se demonstrou muito instável, fazendo com que a esfera seja posicionada para dentro de um objeto, pois o passo que o integrador retorna é muito grande. Tentei diversos ajustes mas não encontrei solução para o problema.
 
 ### Observações
 

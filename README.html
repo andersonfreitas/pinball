@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>EP2</title>
+<link rel="stylesheet" href="https://stackedit.io/res-min/themes/base.css" />
+<script type="text/javascript" src="https://stackedit.io/libs/MathJax/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body><div class="container"><h1 id="ep2">EP2</h1>
+
+<h2 id="pinball-em-3d-com-webgl">Pinball em 3D com WebGL</h2>
+
+<h3 id="autores">Autores</h3>
+
+<p>Anderson Meirelles Freitas (NUSP: 8883719) <br>
+Rafael Will Macedo de Araujo (NUSP: 7261561)</p>
+
+<pre><code>Importante: dadas as atuais restrições de segurança dos navegadores, muitas vezes arquivos externos carregados via XMLHttpRequest não funcionam. Portanto, a aplicação pode ser visualizada sem problemas no link abaixo:
+</code></pre>
+
+<p><a href="http://andersonfreitas.com/pinball/">http://andersonfreitas.com/pinball/</a></p>
+
+<h3 id="instruções">Instruções</h3>
+
+<p>Use as teclas <code>z</code> e <code>x</code> para comandar as paletas e <code>espaço</code> para disparar as esferas. O mouse movimenta a camera.</p>
+
+<p>As teclas de direção do teclado podem ser usados para “cheat”, pois como as vezes a esfera pode ficar travada devido ao problema de colisão, ela pode ser movimentada através desse artifício.</p>
+
+<p>Os botões da interface permitem ajustar diversos controles, como pausar e até a escolha do integrador usado.</p>
+
+<h3 id="colisão-e-física">Colisão e Física</h3>
+
+<p>A colisão é feita com todas as faces da cena. A cena é composta por objetos dinâmicos (esferas) que se movimentam e os estáticos ativos (mesa) e não ativos (domo e piso).</p>
+
+<p>O algoritmo de colisão basicamente testa para cada triangulo se a distância entre o centro da esfera e o vértice mais próximo do triangulo, se a distância ao quadrado for menor que o raio da esfera ao quadrado é considerado uma colisão. O algoritmo de detecção não conhece a normal da face.</p>
+
+<p>Depois da colisão detectada com a face, a reação da colisão é calculada olhando a normal da face, onde a forca é refletida e acumulada com as outras forças da cena.</p>
+
+<p>As principais forças consideradas são a gravidade e o arrasto criado pela densidade do ar (calculado na temperatura de 15º e influenciado pela área da esfera), e ao colidir parte é absorvida pela parede com um coeficiente de restituição usado.</p>
+
+<p>A integração numérica pode ser escolhida entre Euler, Verlet e Runge-Kutta de 4ª ordem, diferentes abordagens foram testadas pois o método de Euler se demonstrou muito instável, fazendo com que a esfera seja posicionada para dentro de um objeto, pois o passo que o integrador retorna é muito grande. Tentei diversos ajustes mas não encontrei solução para o problema.</p>
+
+<h3 id="observações">Observações</h3>
+
+<p>O projeto foi estruturado com classes, e algumas foram escritas originalmente na linguagem CoffeScript que é compilada em Javascript. Tive preferencia pela linguagem pela facilidade para se construtir classes.</p>
+
+<h2 id="bibliotecas-externas">Bibliotecas externas</h2>
+
+<ul>
+<li><strong><a href="http://code.google.com/p/dat-gui/">dat-gui</a></strong> <br>
+Usado para criar os controles interativos da aplicação.</li>
+<li><strong><a href="http://glmatrix.net">glMatrix</a></strong> <br>
+Biblioteca com operações para se trabalhar com matrizes, vetores e quaternions.</li>
+<li><strong><a href="http://jquery.com">jQuery</a></strong> <br>
+Utilitário para acessar o DOM do HTML.</li>
+<li><strong><a href="http://paulirish.com/2011/requestanimationframe-for-smart-animating/">requestAnimationFrame</a></strong> <br>
+Polyfill para que a função <code>requestAnimationFrame</code> funcione em diversos browsers.</li>
+<li><strong><a href="https://github.com/mrdoob/stats.js">stats.js</a></strong> <br>
+Métricas de desempenho da renderização (em fps/ms/Hz).</li>
+<li><strong><a href="http://underscorejs.org">underscore.js</a></strong> <br>
+Provê diversos helpers para a linguagem javascript inspirado de linguagens funcionais. Traz funções como <code>map</code>, <code>reduce</code>, <code>each</code>, etc.</li>
+<li><strong><a href="http://coffeescript.org">coffescript</a></strong> <br>
+Linguagem que compila para Javascript</li>
+</ul></div></body>
+</html>
