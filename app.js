@@ -57,7 +57,7 @@ var Pinball = (function() {
         sceneGraph.push(esfera);
 
         rb = new RigidBody(esfera, 5.0);
-        rb.velocity = vec3.fromValues(0, 0, 3);
+        rb.velocity = vec3.fromValues(0, 0, 3 + Math.random());
         rb.acceleration = vec3.create();
         dynamicSpheres.push(rb);
       }
