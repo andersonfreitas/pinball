@@ -36,8 +36,7 @@ var Pinball = (function() {
     scene: {
       integration: 'RK4',
       shadows: false,
-      wireframe: false,
-      lightning: true,
+      lighting: true,
       zoom: 0.1,
       diffuseLight: '#ccc',
       enablePhysics: true,
@@ -53,8 +52,7 @@ var Pinball = (function() {
   var controllers = {
     scene: {
       audio: folders.scene.add(properties.scene, 'audio'),
-      wireframe: folders.scene.add(properties.scene, 'wireframe'),
-      lightning: folders.scene.add(properties.scene, 'lightning'),
+      lighting: folders.scene.add(properties.scene, 'lighting'),
       integration: folders.scene.add(properties.scene, 'integration', [ 'Euler', 'Verlet', 'RK4']),
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       zoom: folders.scene.add(properties.scene, 'zoom', 0, 8.0).listen(),
@@ -63,7 +61,7 @@ var Pinball = (function() {
     }
   };
 
-  controllers.scene.lightning.onChange(function(value) {
+  controllers.scene.lighting.onChange(function(value) {
     updateLightning(value);
   });
 

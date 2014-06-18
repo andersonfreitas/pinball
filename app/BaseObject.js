@@ -196,9 +196,5 @@ BaseObject.prototype.render = function() {
   gl.bindTexture(gl.TEXTURE_2D, this.texture);
   gl.uniform1i(currentProgram.samplerUniform, 0);
 
-  if (Pinball.properties.scene.wireframe) {
-    gl.drawElements(gl.LINE_STRIP, this.indices.length, gl.UNSIGNED_SHORT, 0);
-  } else {
-    gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
-  }
+  gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
 };
