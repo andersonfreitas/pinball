@@ -1,9 +1,3 @@
-###
-Particle Physics
-
-@author Anderson Freitas
-###
-
 class Particle
   constructor: (@sphere, @mass) ->
     @radius = @sphere.radius
