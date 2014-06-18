@@ -200,19 +200,20 @@ var Pinball = (function() {
     lastTime = timeNow;
   }
 
+  var gravity = vec3.fromValues(0, -9.81 /* m^s */, 0);
   function animate() {
     requestAnimationFrame(animate);
     stats.begin();
 
-    var gravity = vec3.fromValues(0, -9.81 /* m^s */, 0);
-
     for (var i = 0; i < dynamicSpheres.length; i++) {
       obj = dynamicSpheres[i];
 
+      obj.gravity = gravity;
+
       // obj.applyForce(wind);
-      obj.checkForCollisions(1/10, staticObjects, dynamicSpheres);
-      obj.applyForce(gravity);
-      obj.update(1/30);
+      obj.checkForCollisions(1/60, staticObjects, dynamicSpheres);
+      // obj.applyForce(gravity);
+      obj.updateRK4(1/30);
     };
 
     updateAnimationTime();
@@ -231,7 +232,7 @@ var Pinball = (function() {
 
     objects.esfera = new Sphere(0.015)
     addToScene(objects.esfera);
-    objects.esfera.updatePosition(0.0, 0.5, 0.0)
+    objects.esfera.updatePosition(0.5, 0.5, 0.5)
 
     dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
 
