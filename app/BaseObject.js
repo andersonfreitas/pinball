@@ -10,6 +10,7 @@ function BaseObject() {
   this.vertices = [];
   this.normals = [];
   this.indices = [];
+  this.faces = [];
   this.textureCoords = [];
 
   this.animationTime = 0;
@@ -23,6 +24,7 @@ BaseObject.prototype.updatePosition = function(x, y, z) {
 
 BaseObject.prototype.rotate = function(rotation) {
   this.rotation = rotation;
+  // this.adjusted = false;
   return this;
 };
 
