@@ -20,6 +20,7 @@ Particle = (function() {
     this.speed = 0;
     this.colliding = false;
     this.impactForces;
+    this.gravity = vec3.fromValues(0, 0, -9.81);
     this.acceleration = vec3.create();
   }
 
@@ -131,7 +132,7 @@ Particle = (function() {
   };
 
   Particle.prototype.current_force = function(position, velocity) {
-    var Fd, drag, forces, gravity, vel_sq2;
+    var Fd, drag, forces, vel_sq2;
     forces = vec3.create();
     if (this.colliding) {
       vec3.add(forces, forces, this.impactForces);
@@ -140,8 +141,7 @@ Particle = (function() {
     Fd = 0.5 * this.Cd * this.A * this.rho;
     drag = scale(vel_sq2, Fd);
     vec3.normalize(drag, drag);
-    gravity = vec3.fromValues(0, 0, -9.81);
-    forces = add(forces, gravity);
+    forces = add(forces, this.gravity);
     forces = add(forces, drag);
     forces = scale(forces, 1 / this.mass);
     return forces;

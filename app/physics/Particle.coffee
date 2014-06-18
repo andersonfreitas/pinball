@@ -19,6 +19,7 @@ class Particle
 
     @colliding = false
     @impactForces
+    @gravity = vec3.fromValues(0, 0, -9.81) # m^s
 
     @acceleration = vec3.create()
 
@@ -158,9 +159,7 @@ class Particle
     drag = scale(vel_sq2, Fd)
     vec3.normalize(drag, drag)
 
-    gravity = vec3.fromValues(0, 0, -9.81) # m^s
-
-    forces = add(forces, gravity)
+    forces = add(forces, @gravity)
     forces = add(forces, drag)
 
     forces = scale(forces, 1/@mass)
