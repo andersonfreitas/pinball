@@ -327,6 +327,8 @@ var Pinball = (function() {
 
   var worldFaces = []
 
+  audio = new Audio();
+
   function initScene() {
     function addToScene(object) {
       staticObjects.push(object);

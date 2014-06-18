@@ -70,6 +70,7 @@ Particle = (function() {
           vec3.scale(Fi, Fi, impulse / dt);
           vec3.add(this.impactForces, this.impactForces, Fi);
           this.colliding = true;
+          audio.effects.chomp.play();
           break;
         }
       }
