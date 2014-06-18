@@ -40,7 +40,8 @@ var Pinball = (function() {
       lightning: true,
       zoom: 0.1,
       diffuseLight: '#ccc',
-      enablePhysics: false
+      enablePhysics: false,
+      reset: function() { objects.esfera.reset(); }
     }
   };
 
@@ -56,6 +57,7 @@ var Pinball = (function() {
       diffuseLight: folders.scene.addColor(properties.scene, 'diffuseLight'),
       zoom: folders.scene.add(properties.scene, 'zoom', 0, 8.0).listen(),
       physics: folders.scene.add(properties.scene, 'enablePhysics').listen(),
+      reset: folders.scene.add(properties.scene, 'reset'),
     }
   };
 
@@ -346,10 +348,9 @@ var Pinball = (function() {
     dynamicSpheres.push(new RigidBody(objects.esfera, 5.0));
 
     objects.esfera.reset = function() {
-      // [-0.38064073512970287, 0.016, -0.28420371626757474]
-      objects.esfera.updatePosition(-0.1, 0.016, 0.4);
+      objects.esfera.updatePosition(-0.380640, 0.016, -0.284203);
 
-      dynamicSpheres[0].velocity = vec3.fromValues(0, 0, 1);
+      dynamicSpheres[0].velocity = vec3.fromValues(0, 0, 3);
       dynamicSpheres[0].acceleration = vec3.create();
     }
 
