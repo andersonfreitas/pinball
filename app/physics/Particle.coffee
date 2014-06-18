@@ -20,6 +20,8 @@ class Particle
     @colliding = false
     @impactForces
 
+    @acceleration = vec3.create()
+
   # aggregate a force vector
   applyForce: (force) ->
     @forces = vec3.create()
@@ -106,6 +108,10 @@ class Particle
   dt = time step
   ###
   update: (dt) ->
+    # @updateEuler(dt)
+    @updateVerlet(dt)
+
+  updateEuler: (dt) ->
     acceleration = vec3.create()
     dv = vec3.create()
     ds = vec3.create()
@@ -129,5 +135,17 @@ class Particle
     # speed = velocity.magnitude
     @speed = vec3.length(@velocity)
 
+  updateVerlet: (dt) ->
+    last_acceleration = @acceleration
+
+    new_pos = add(scale(@velocity, dt), scale(last_acceleration, dt*dt*0.5))
+
+    vec3.add(@sphere.position, @sphere.position, new_pos)
+
+    new_acceleration = scale(@forces, 1/@mass)
+
+    @acceleration = scale(add(last_acceleration, new_acceleration), 0.5)
+
+    @velocity = add(@velocity, scale(@acceleration, dt))
 
 window.RigidBody = Particle
