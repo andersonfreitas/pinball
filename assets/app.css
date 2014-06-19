@@ -25,4 +25,6 @@ body {
 #gameover {
  font-size: 6em;
  color: #F27572;
+ visibility: hidden;
+ display: none;
 }
